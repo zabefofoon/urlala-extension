@@ -1,41 +1,70 @@
-<script lang="ts"></script>
+<script lang="ts">
+  import { Check, X } from 'lucide-svelte'
+</script>
 
-<div class="flex-1 flex flex-col">
-  <div class="px-3">
-    <table
-      class=" border-spacing-y-2 border-spacing-x-0 w-full border-separate"
-    >
+<div class="flex min-h-0 flex-1 flex-col bg-surface">
+  <div class="min-h-0 flex-1 px-3 py-3">
+    <table class="w-full border-separate border-spacing-x-0 border-spacing-y-2">
       <tbody>
         <tr>
-          <td>이름</td>
-          <td>
-            <input placeholder="이름" />
+          <td class="pr-2 text-[12px] font-medium text-text-secondary">
+            <span class="whitespace-nowrap">제목</span>
+          </td>
+          <td class="w-full">
+            <input
+              placeholder="제목을 입력하세요"
+              class="h-9 w-full rounded-md border border-border bg-surface-section px-3 text-[13px] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
+            />
           </td>
         </tr>
         <tr>
-          <td class="align-top">Url</td>
-          <td>
-            <textarea placeholder="Url"></textarea>
+          <td
+            class="pr-2 pt-2 align-top text-[12px] font-medium text-text-secondary"
+          >
+            <span class="whitespace-nowrap">URL</span>
+          </td>
+          <td class="w-full">
+            <textarea
+              placeholder="https://example.com"
+              rows="3"
+              class="min-h-[72px] w-full resize-none rounded-md border border-border bg-surface-section px-2 py-2 text-[13px] leading-[1.45] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
+            ></textarea>
           </td>
         </tr>
         <tr>
-          <td class="align-top">메모</td>
-          <td>
-            <textarea placeholder="메모"></textarea>
+          <td
+            class="w-[52px] pr-2 pt-2 align-top text-[12px] font-medium text-text-secondary"
+          >
+            메모
+          </td>
+          <td class="w-full">
+            <textarea
+              placeholder="메모를 입력하세요"
+              rows="3"
+              class="min-h-[72px] w-full resize-none rounded-md border border-border bg-surface-section px-2 py-2 text-[13px] leading-[1.45] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
+            ></textarea>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="mt-auto border-t border-border flex items-cener py-2 gap-1 px-3">
-    <button type="button" class="ml-auto py-1 px-2 flex items-center">
-      <span class="text-[12px] leading-[100%] text-text-secondary"> 취소 </span>
+
+  <div
+    class="mt-auto flex items-center gap-1.5 border-t border-border px-3 py-2"
+  >
+    <button
+      type="button"
+      class="ml-auto flex h-8 items-center gap-1 rounded-full px-3 text-text-secondary transition hover:bg-surface-elevated"
+    >
+      <X size="14px" />
+      <span class="text-[12px] leading-none">취소</span>
     </button>
     <button
       type="button"
-      class="py-1.5 px-3 bg-primary text-white rounded-full flex items-center"
+      class="flex h-8 items-center gap-1 rounded-full bg-primary px-3 text-white shadow-sm transition hover:brightness-95"
     >
-      <span class="text-[12px] leading-[100%]"> 추가 </span>
+      <Check size="14px" />
+      <span class="text-[12px] leading-none">추가</span>
     </button>
   </div>
 </div>

@@ -7,7 +7,7 @@
   let selectedMenu = $state<'add' | 'folders'>('add')
 </script>
 
-<main class="w-[320px] aspect-square bg-surface rounded-2xl flex flex-col">
+<main class="w-[320px] min-h-[320px] bg-surface rounded-2xl flex flex-col">
   <div class="flex items-center border-b border-border pt-1 px-3 pb-1.5">
     <div class="flex items-center gap-1.5">
       <img src="/images/logo.webp" alt="Urlala" class="w-[20px]" />
