@@ -3,7 +3,7 @@
 </script>
 
 <div class="flex min-h-0 flex-1 flex-col bg-surface">
-  <div class="min-h-0 flex-1 px-3 py-3">
+  <section class="min-h-0 flex-1 px-3 py-3">
     <table class="w-full border-separate border-spacing-y-0">
       <tbody>
         <tr>
@@ -45,9 +45,9 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </section>
 
-  <div
+  <section
     class="mt-auto flex items-center gap-1.5 border-t border-border px-3 py-2"
   >
     <button
@@ -64,5 +64,5 @@
       <Check size="14px" />
       <span class="text-[12px] leading-none">추가</span>
     </button>
-  </div>
+  </section>
 </div>
