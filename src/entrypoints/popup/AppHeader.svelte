@@ -8,6 +8,14 @@
   }
 
   const props: Props = $props()
+
+  const openOptionsPage = async () => {
+    try {
+      await browser.runtime.openOptionsPage()
+    } catch (error) {
+      console.error('Failed to open options page:', error)
+    }
+  }
 </script>
 
 <header class="flex items-center border-b border-border pt-1 px-3 pb-1.5">
@@ -50,7 +58,13 @@
         <span class="text-[11px] leading-[100%]">Hello, zabefofoon</span>
       </button>
     {/if}
-    <button type="button" class="text-text-secondary ml-1.5">
+    <button
+      type="button"
+      class="text-text-secondary ml-1.5"
+      aria-label="옵션 페이지 열기"
+      title="옵션 페이지 열기"
+      onclick={openOptionsPage}
+    >
       <IconSettings size="16px" />
     </button>
   </div>

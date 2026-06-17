@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-svelte'],
+  manifest: {
+    permissions: ['contextMenus'],
+  },
   vite: () => ({
     plugins: [tailwindcss()],
   }),
