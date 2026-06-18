@@ -2,16 +2,26 @@
 	import { PREV_ITEM } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
-	import { ChevronRight } from 'lucide-svelte'
-	import { onMount } from 'svelte'
+	import { ChevronRight as IconChevronRight, RefreshCw as IconRefresh } from 'lucide-svelte'
 	import FileItem from './FileItem.svelte'
 	import PopupFoldersBreadcrumbs from './PopupFoldersBreadcrumbs.svelte'
+
 	let loadMoreEl = $state<HTMLElement>()
 
 	const moveToUrlala = () => {
 		browser.tabs.create({ url: `https://urlala.pages.dev/folder/root` })
 		window.close()
 	}
+
+	const refresh = () => {
+		foldersStore.goRoot()
+		if (authStore.isLoggedIn) foldersStore.load(true)
+	}
+
+	const items = $derived.by(() => {
+		const items = foldersStore.pageResponse?.items ?? []
+		return foldersStore.path.length ? [PREV_ITEM, ...items] : items
+	})
 
 	$effect(() => {
 		if (!loadMoreEl) return
@@ -22,12 +32,8 @@
 		return () => observer.disconnect()
 	})
 
-	onMount(() => {
-		if (authStore.isLoggedIn) foldersStore.load()
-	})
-
 	$effect(() => {
-		if (authStore.isLoggedIn) foldersStore.load()
+		if (authStore.user) foldersStore.restore()
 	})
 </script>
 
@@ -36,6 +42,14 @@
 		{#if foldersStore.pageResponse?.items.length}
 			<header class="flex items-center px-3 pt-2 shrink-0">
 				<PopupFoldersBreadcrumbs />
+				<button
+					type="button"
+					class="gap-1 ml-auto flex items-center text-primary"
+					onclick={refresh}
+				>
+					<IconRefresh size="12px" />
+					<span class="text-[11px] tracking-[-0.2px]">새로고침</span>
+				</button>
 			</header>
 		{/if}
 
@@ -50,15 +64,11 @@
 						<div class="h-8 animate-pulse rounded-md bg-surface-elevated"></div>
 					{/each}
 				</div>
-			{:else if !foldersStore.pageResponse?.items.length}
+			{:else if !items.length}
 				<p class="py-6 text-center text-[12px] text-text-secondary">항목이 없습니다.</p>
 			{:else}
 				<div class="flex flex-col gap-1.5">
-					{#if foldersStore.path.length}
-						<FileItem item={PREV_ITEM} />
-					{/if}
-
-					{#each foldersStore.pageResponse.items as item (item.id)}
+					{#each items as item (item.id)}
 						<FileItem {item} />
 					{/each}
 				</div>
@@ -88,7 +98,7 @@
 			onclick={moveToUrlala}
 		>
 			<span class="text-[12px] leading-none font-bold">이동</span>
-			<ChevronRight size="12px" strokeWidth="3px" />
+			<IconChevronRight size="12px" strokeWidth="3px" />
 		</button>
 	</footer>
 </div>
