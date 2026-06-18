@@ -17,15 +17,6 @@ export default defineBackground(() => {
 			})
 			return
 		}
-
-		if (info.menuItemId === 'urlala-open-options') {
-			await browser.runtime.openOptionsPage()
-			return
-		}
-
-		if (info.menuItemId === 'urlala-open-sidepanel' && tab?.id != null) {
-			await browser.sidePanel.open({ tabId: tab.id })
-		}
 	})
 
 	// 구글 로그인 완료 탭 감지
@@ -42,8 +33,11 @@ export default defineBackground(() => {
 
 			if (accessToken && refreshToken) {
 				await browser.storage.local.set({ accessToken, refreshToken })
+
+				const { authStore } = await import('@/stores/auth.svelte')
+				await authStore.load()
+
 				await browser.tabs.remove(tabId)
-				// 팝업 UI에 로그인 완료 알림
 				browser.runtime.sendMessage({ type: 'AUTH_SUCCESS' }).catch(() => {})
 			}
 		} catch (e) {

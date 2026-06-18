@@ -10,7 +10,7 @@
 
 	const props: Props = $props()
 
-	const URLALA_BASE_URL = 'http://localhost:5173'
+	const URLALA_BASE_URL = 'https://urlala.pages.dev'
 
 	const openOptionsPage = async () => {
 		try {
@@ -23,18 +23,14 @@
 	const login = async () => {
 		await browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })
 	}
-
-	const logout = async () => {
-		await authStore.clearTokens()
-	}
 </script>
 
 <header class="flex items-center border-b border-border pt-1 px-3 pb-1.5">
-	<div class="flex items-center gap-1.5">
+	<div class="flex items-center gap-1.5 shrink-0">
 		<img src="/images/logo.webp" alt="Urlala" class="w-[20px]" />
 		<p class="font-[600]">Urlala</p>
 	</div>
-	<div class="flex items-center ml-3 gap-2">
+	<div class="flex items-center ml-3 gap-2 shrink-0">
 		<button
 			type="button"
 			class={cn(['py-1', { 'text-primary underline': props.selectedMenu === 'add' }])}
@@ -50,7 +46,7 @@
 			<span class="leading-[100%] text-[12px]">폴더</span>
 		</button>
 	</div>
-	<div class="flex items-center ml-auto">
+	<div class="flex items-center ml-auto overflow-hidden whitespace-nowrap">
 		{#if !authStore.isLoggedIn}
 			<button
 				type="button"
@@ -60,8 +56,10 @@
 				<span class="text-[11px] leading-[100%]">로그인</span>
 			</button>
 		{:else}
-			<button type="button" class="flex items-center" onclick={logout}>
-				<span class="text-[11px] leading-[100%]">로그아웃</span>
+			<button type="button" class="flex items-center w-full overflow-hidden">
+				<span class="text-[11px] leading-[100%] tracking-[-0.2px] truncate">
+					{authStore.user?.email}
+				</span>
 			</button>
 		{/if}
 		<button
