@@ -2,85 +2,85 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-  --color-primary: var(--color-blue-500);
+	--color-primary: var(--color-blue-500);
 
-  --color-surface: #ffffff;
-  --color-surface-elevated: #f5f5f5;
-  --color-surface-section: #fcfcfc;
-  --color-disabled: #cfcfcf;
+	--color-surface: #ffffff;
+	--color-surface-elevated: #f5f5f5;
+	--color-surface-section: #fcfcfc;
+	--color-disabled: #cfcfcf;
 
-  --color-text-primary: #000000;
-  --color-text-secondary: #5e5e5e;
+	--color-text-primary: #000000;
+	--color-text-secondary: #5e5e5e;
 
-  --color-border: var(--color-gray-200);
-  --color-border-light: var(--color-gray-100);
+	--color-border: var(--color-gray-200);
+	--color-border-light: var(--color-gray-100);
 
-  --color-folder-yellow: var(--color-yellow-100);
-  --color-folder-orange: var(--color-orange-100);
-  --color-folder-red: var(--color-red-100);
-  --color-folder-violet: var(--color-violet-100);
-  --color-folder-blue: var(--color-blue-100);
-  --color-folder-green: var(--color-green-100);
+	--color-folder-yellow: var(--color-yellow-100);
+	--color-folder-orange: var(--color-orange-100);
+	--color-folder-red: var(--color-red-100);
+	--color-folder-violet: var(--color-violet-100);
+	--color-folder-blue: var(--color-blue-100);
+	--color-folder-green: var(--color-green-100);
 
-  --breakpoint-3xl: 1921px;
+	--breakpoint-3xl: 1921px;
 }
 
 @layer {
-  * {
-    font-family:
-      'Pretendard Variable',
-      Pretendard,
-      -apple-system,
-      BlinkMacSystemFont,
-      system-ui,
-      Roboto,
-      'Helvetica Neue',
-      'Segoe UI',
-      'Apple SD Gothic Neo',
-      'Noto Sans KR',
-      'Malgun Gothic',
-      'Apple Color Emoji',
-      'Segoe UI Emoji',
-      'Segoe UI Symbol',
-      sans-serif;
-    -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+	* {
+		font-family:
+			'Pretendard Variable',
+			Pretendard,
+			-apple-system,
+			BlinkMacSystemFont,
+			system-ui,
+			Roboto,
+			'Helvetica Neue',
+			'Segoe UI',
+			'Apple SD Gothic Neo',
+			'Noto Sans KR',
+			'Malgun Gothic',
+			'Apple Color Emoji',
+			'Segoe UI Emoji',
+			'Segoe UI Symbol',
+			sans-serif;
+		-webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
 
-  button {
-    cursor: pointer;
-  }
+	button {
+		cursor: pointer;
+	}
 }
 
 html {
-  color: var(--color-text-primary);
+	color: var(--color-text-primary);
 }
 
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+	html {
+		color-scheme: dark;
 
-    --color-surface: #1a1a1a;
-    --color-surface-elevated: #222222;
-    --color-surface-section: #222222;
-    --color-disabled: #737373;
+		--color-surface: #1a1a1a;
+		--color-surface-elevated: #222222;
+		--color-surface-section: #222222;
+		--color-disabled: #737373;
 
-    --color-text-primary: #f0f0f0;
-    --color-text-secondary: #a0a0a0;
+		--color-text-primary: #f0f0f0;
+		--color-text-secondary: #a0a0a0;
 
-    --color-border: var(--color-zinc-700);
-    --color-border-light: var(--color-zinc-800);
+		--color-border: var(--color-zinc-700);
+		--color-border-light: var(--color-zinc-800);
 
-    --color-folder-yellow: #d4b33f;
-    --color-folder-orange: #c98952;
-    --color-folder-red: #cc777d;
-    --color-folder-violet: #9c89d8;
-    --color-folder-blue: #729fd2;
-    --color-folder-green: #69bd86;
-  }
+		--color-folder-yellow: #d4b33f;
+		--color-folder-orange: #c98952;
+		--color-folder-red: #cc777d;
+		--color-folder-violet: #9c89d8;
+		--color-folder-blue: #729fd2;
+		--color-folder-green: #69bd86;
+	}
 }
 
 #app {
-  font-size: 15px;
+	font-size: 15px;
 }
