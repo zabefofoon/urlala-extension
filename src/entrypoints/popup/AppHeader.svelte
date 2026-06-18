@@ -35,16 +35,26 @@
 	<div class="flex items-center ml-3 gap-2 shrink-0">
 		<button
 			type="button"
-			class={cn(['py-1', { 'text-primary underline': props.selectedMenu === 'add' }])}
+			class={cn(['relative py-1', { 'text-primary': props.selectedMenu === 'add' }])}
 			onclick={() => props.selectMenu('add')}
 		>
+			{#if props.selectedMenu === 'add'}
+				<div
+					class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[80%] rounded-full bg-primary/10"
+				></div>
+			{/if}
 			<span class="leading-[100%] text-[12px]">추가</span>
 		</button>
 		<button
 			type="button"
-			class={cn(['py-1', { 'text-primary underline': props.selectedMenu === 'folders' }])}
+			class={cn(['relative py-1', { 'text-primary': props.selectedMenu === 'folders' }])}
 			onclick={() => props.selectMenu('folders')}
 		>
+			{#if props.selectedMenu === 'folders'}
+				<div
+					class="absolute top-[calc(50%+1px)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[80%] rounded-full bg-primary/10"
+				></div>
+			{/if}
 			<span class="leading-[100%] text-[12px]">폴더</span>
 		</button>
 	</div>
