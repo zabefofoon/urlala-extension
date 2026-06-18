@@ -45,8 +45,13 @@ class FoldersStore {
 	}
 
 	enterFolder = (folder: Folder) => {
-		this.path.push(folder)
-		this.load()
+		if (folder.id === 'prev') {
+			this.path.pop()
+			this.load()
+		} else {
+			this.path.push(folder)
+			this.load()
+		}
 	}
 
 	navigateTo = (index: number) => {
@@ -57,24 +62,6 @@ class FoldersStore {
 	goRoot = () => {
 		this.path = []
 		this.load()
-	}
-
-	addFolder = async () => {
-		const userId = authStore.user?.id
-		if (!userId) return
-
-		const folder: Folder = {
-			id: crypto.randomUUID(),
-			parent_id: this.currentFolderId,
-			label: '새 폴더',
-			type: 'folder',
-			color: 'yellow',
-			locked: false,
-			sort_order: 0
-		}
-
-		await itemsApi.save(folder, userId)
-		await this.load()
 	}
 }
 

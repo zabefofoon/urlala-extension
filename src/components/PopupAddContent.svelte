@@ -73,15 +73,15 @@
 			class="ml-auto flex h-6.5 items-center gap-1 rounded-full px-3 text-text-secondary transition hover:bg-surface-elevated"
 			onclick={closePopup}
 		>
-			<IconX size="14px" />
+			<IconX size="12px" strokeWidth="3px" />
 			<span class="text-[12px] leading-none">취소</span>
 		</button>
 		<button
 			type="button"
-			class="flex h-6.5 items-center gap-1 rounded-full bg-primary px-3 text-white shadow-sm transition hover:brightness-95"
+			class="flex h-6.5 items-center gap-1 rounded-full bg-primary pl-2.5 pr-3 text-white shadow-sm transition hover:brightness-95"
 		>
-			<IconCheck size="14px" />
-			<span class="text-[12px] leading-none">추가</span>
+			<IconCheck size="12px" strokeWidth="3px" />
+			<span class="text-[12px] leading-none font-bold">추가</span>
 		</button>
 	</section>
 </div>

@@ -23,9 +23,9 @@
 	})
 </script>
 
-<main class="w-[320px] min-h-[320px] bg-surface rounded-2xl flex flex-col">
+<main class="w-[320px] aspect-square bg-surface rounded-2xl flex flex-col overscroll-none">
 	<AppHeader {selectedMenu} {selectMenu} />
-	<div class="flex flex-1">
+	<div class="flex flex-col flex-1 overflow-hidden">
 		{#if selectedMenu === 'add'}
 			<PopupAddContent />
 		{:else}

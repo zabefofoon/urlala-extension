@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { ChevronRight as IconChevronRight } from 'lucide-svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
+	import { ChevronRight as IconChevronRight } from 'lucide-svelte'
 </script>
 
 <div class="flex min-w-0 items-center gap-0.5 overflow-hidden">

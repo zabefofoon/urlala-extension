@@ -25,7 +25,9 @@
 	}
 </script>
 
-<header class="flex items-center border-b border-border pt-1 px-3 pb-1.5">
+<header
+	class="sticky top-0 left-0 flex items-center border-b border-border pt-1 px-3 pb-1.5 bg-surface"
+>
 	<div class="flex items-center gap-1.5 shrink-0">
 		<img src="/images/logo.webp" alt="Urlala" class="w-[20px]" />
 		<p class="font-[600]">Urlala</p>
@@ -58,7 +60,7 @@
 		{:else}
 			<button type="button" class="flex items-center w-full overflow-hidden">
 				<span class="text-[11px] leading-[100%] tracking-[-0.2px] truncate">
-					{authStore.user?.email}
+					{authStore.user?.email.split('@')[0]}
 				</span>
 			</button>
 		{/if}

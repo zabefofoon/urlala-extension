@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { cn } from '@/lib/utils/cn'
 	import type { Folder, Item } from '@/models/Item'
 	import { foldersStore } from '@/stores/folders.svelte'
 	import {
 		ArrowUpRight as IconArrowUpRight,
 		ChevronRight as IconChevronRight,
-		Folder as IconFolder,
-		GripVertical as IconGripVertical
+		Folder as IconFolder
 	} from 'lucide-svelte'
 
 	interface Props {
@@ -24,25 +24,23 @@
 	}
 </script>
 
-<div class="transition-opacity" draggable="true" role="none">
+<div class="transition-opacity">
 	{#if props.item.type === 'folder'}
-		{@const folder = props.item as Folder}
 		<button
 			type="button"
-			class="flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-left transition-all hover:brightness-95 {FOLDER_BG[
-				props.item.color ?? 'yellow'
-			]}"
-			onclick={() => foldersStore.enterFolder(folder)}
+			class={cn([
+				'flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-left transition-all hover:brightness-95 ',
+				FOLDER_BG[props.item.color ?? 'yellow'],
+				{ 'bg-surface-elevated': props.item.id === 'prev' }
+			])}
+			onclick={() => foldersStore.enterFolder(props.item as Folder)}
 		>
 			<IconFolder size="14px" class="shrink-0 text-text-secondary" />
-			<span class="flex-1 truncate text-[12px] leading-none">{folder.label}</span>
+			<span class="flex-1 truncate text-[12px] leading-none">{props.item.label}</span>
 			<IconChevronRight size="13px" class="shrink-0 text-text-secondary" />
 		</button>
 	{:else}
 		<div class="flex items-center gap-1.5 rounded-md border border-border px-2 py-1.5">
-			<span class="cursor-grab text-text-secondary active:cursor-grabbing">
-				<IconGripVertical size="13px" />
-			</span>
 			{#if props.item.thumbnail}
 				<img
 					src={props.item.thumbnail}

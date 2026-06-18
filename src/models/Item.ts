@@ -50,3 +50,13 @@ export interface PageResponse {
 export interface CachedFolder extends Folder {
 	res?: PageResponse
 }
+
+export const PREV_ITEM: Folder = {
+	id: 'prev',
+	parent_id: undefined,
+	label: '..',
+	type: 'folder',
+	color: DEFAULT_FOLDER_COLOR,
+	locked: false,
+	sort_order: -1
+}
