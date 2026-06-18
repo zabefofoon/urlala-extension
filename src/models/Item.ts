@@ -1,11 +1,4 @@
-export const FOLDER_COLORS = [
-  'yellow',
-  'orange',
-  'red',
-  'violet',
-  'blue',
-  'green',
-] as const
+export const FOLDER_COLORS = ['yellow', 'orange', 'red', 'violet', 'blue', 'green'] as const
 
 export type FolderColor = (typeof FOLDER_COLORS)[number]
 
