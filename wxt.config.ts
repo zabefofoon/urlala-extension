@@ -13,7 +13,7 @@ export default defineConfig({
   }),
 
   // TODO 개발용
-  runner: {
+  webExt: {
     chromiumArgs: [
       `--user-data-dir=${process.env.HOME}/.wxt-chrome-profile`,
       '--disable-blink-features=AutomationControlled',
