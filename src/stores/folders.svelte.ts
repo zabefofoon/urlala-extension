@@ -1,5 +1,5 @@
 import { itemsApi } from '@/api/items.api'
-import type { Folder, PageResponse } from '@/models/Item'
+import type { AddLinkInput, Folder, Link, PageResponse } from '@/models/Item'
 import dayjs from 'dayjs'
 import { authStore } from './auth.svelte'
 
@@ -15,6 +15,7 @@ class FoldersStore {
 	path = $state<Folder[]>([])
 	pageResponse = $state<PageResponse | undefined>()
 	isLoading = $state(false)
+	private isPathInitialized = false
 
 	get currentFolderId() {
 		return this.path.at(-1)?.id ?? 'root'
@@ -56,27 +57,32 @@ class FoldersStore {
 		if (cacheKeys.length) await browser.storage.local.remove(cacheKeys)
 	}
 
+	private savePath() {
+		this.isPathInitialized = true
+		browser.storage.local.set({ folders_path: $state.snapshot(this.path) })
+	}
+
+	private async initializePath() {
+		if (this.isPathInitialized) return
+
+		const stored = await browser.storage.local.get('folders_path')
+		this.path = (stored.folders_path as Folder[] | undefined) ?? []
+		this.isPathInitialized = true
+	}
+
 	// 팝업 최초 진입 시 저장된 path를 복원하고, 캐시가 살아있으면 그대로 사용
-	restore = async () => {
+	async restore() {
 		const userId = authStore.user?.id
 		if (!userId) return
 
-		const stored = await browser.storage.local.get('folders_path')
-		const savedPath = stored.folders_path as Folder[] | undefined
-		if (savedPath?.length) {
-			const lastFolderId = savedPath.at(-1)?.id ?? 'root'
-			const cached = await this.readCache(userId, lastFolderId)
-
-			if (cached) {
-				this.path = savedPath
-				return (this.pageResponse = cached)
-			}
-		}
+		await this.initializePath()
+		const cached = await this.readCache(userId, this.currentFolderId)
+		if (cached) return (this.pageResponse = cached)
 
 		await this.load()
 	}
 
-	load = async (force?: boolean) => {
+	async load(force?: boolean) {
 		const userId = authStore.user?.id
 		if (!userId) return
 
@@ -97,7 +103,7 @@ class FoldersStore {
 		}
 	}
 
-	loadMore = async () => {
+	async loadMore() {
 		const userId = authStore.user?.id
 		if (!userId || !this.pageResponse?.nextCursor) return
 
@@ -116,11 +122,7 @@ class FoldersStore {
 		}
 	}
 
-	private savePath() {
-		browser.storage.local.set({ folders_path: $state.snapshot(this.path) })
-	}
-
-	enterFolder = (folder: Folder) => {
+	enterFolder(folder: Folder) {
 		if (folder.id === 'prev') {
 			this.path.pop()
 		} else {
@@ -130,16 +132,61 @@ class FoldersStore {
 		this.load()
 	}
 
-	navigateTo = (index: number) => {
+	navigateTo(index: number) {
 		this.path = this.path.slice(0, index + 1)
 		this.savePath()
 		this.load()
 	}
 
-	goRoot = () => {
+	goRoot() {
 		this.path = []
 		this.savePath()
 		this.load()
+	}
+
+	async addLink(input: AddLinkInput) {
+		const userId = authStore.user?.id
+		const rawUrl = input.url?.trim()
+		if (!userId || !rawUrl) return false
+
+		await this.initializePath()
+		const parentId = this.currentFolderId
+		const url: URL = new URL(rawUrl)
+
+		const pageResponse = await itemsApi.findChildrenPage(parentId, userId)
+		const items = [...pageResponse.items]
+		const firstLinkIndex = items.findIndex((item) => item.type === 'link')
+		const insertIndex = firstLinkIndex === -1 ? items.length : firstLinkIndex
+		const prevItem = items[insertIndex - 1]
+		const nextItem = items[insertIndex]
+		const sortOrder =
+			prevItem && nextItem
+				? (prevItem.sort_order + nextItem.sort_order) / 2
+				: prevItem
+					? prevItem.sort_order + 1
+					: nextItem
+						? nextItem.sort_order - 1
+						: 0
+
+		const link: Link = {
+			id: crypto.randomUUID(),
+			parent_id: parentId,
+			label: input.label?.trim() || rawUrl,
+			type: 'link',
+			url: rawUrl,
+			thumbnail: input.thumbnail || new URL('/favicon.ico', url.origin).href,
+			locked: false,
+			memo: input.memo?.trim() || undefined,
+			sort_order: sortOrder,
+			collectable: true
+		}
+
+		await itemsApi.save(link, userId)
+		items.splice(insertIndex, 0, link)
+
+		await browser.storage.local.remove(`${CACHE_KEY_PREFIX}${userId}:${parentId}`)
+
+		return true
 	}
 }
 

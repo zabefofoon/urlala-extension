@@ -4,16 +4,16 @@ import { apiClient } from './apiClient'
 const PAGE_SIZE = 20
 
 export const itemsApi = {
-	findChildrenPage: async (
+	async findChildrenPage(
 		parentId: string,
 		userId: string,
-		cursor?: ItemCursor,
-	): Promise<PageResponse> => {
+		cursor?: ItemCursor
+	): Promise<PageResponse> {
 		const baseParams = {
 			user_id: `eq.${userId}`,
 			parent_id: `eq.${parentId}`,
 			deleted_at: 'is.null',
-			order: 'sort_order.asc,id.asc',
+			order: 'sort_order.asc,id.asc'
 		}
 
 		const pageParams: Record<string, unknown> = { ...baseParams, limit: PAGE_SIZE + 1 }
@@ -28,7 +28,7 @@ export const itemsApi = {
 		if (!cursor) {
 			const countRes = await apiClient.get('/rest/v1/url_items', {
 				params: { ...baseParams, select: 'id' },
-				headers: { Prefer: 'count=exact' },
+				headers: { Prefer: 'count=exact' }
 			})
 			const contentRange = countRes.headers['content-range'] as string | undefined
 			total = contentRange ? parseInt(contentRange.split('/')[1]) : undefined
@@ -44,24 +44,24 @@ export const itemsApi = {
 				items.length > PAGE_SIZE && lastItem
 					? { id: lastItem.id, sort_order: lastItem.sort_order }
 					: undefined,
-			total,
+			total
 		}
 	},
 
-	save: async (item: Item, userId: string) => {
+	async save(item: Item, userId: string) {
 		return apiClient.post(
 			'/rest/v1/url_items',
 			{ ...item, user_id: userId, updated_at: new Date().toISOString() },
-			{ headers: { Prefer: 'resolution=merge-duplicates' } },
+			{ headers: { Prefer: 'resolution=merge-duplicates' } }
 		)
 	},
 
-	saveMany: async (items: Item[], userId: string) => {
+	async saveMany(items: Item[], userId: string) {
 		if (items.length === 0) return
 		return apiClient.post(
 			'/rest/v1/url_items',
 			items.map((item) => ({ ...item, user_id: userId, updated_at: new Date().toISOString() })),
-			{ headers: { Prefer: 'resolution=merge-duplicates' } },
+			{ headers: { Prefer: 'resolution=merge-duplicates' } }
 		)
-	},
+	}
 }

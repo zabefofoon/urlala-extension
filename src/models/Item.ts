@@ -60,3 +60,5 @@ export const PREV_ITEM: Folder = {
 	locked: false,
 	sort_order: -1
 }
+
+export type AddLinkInput = Partial<Pick<Link, 'label' | 'memo' | 'thumbnail' | 'url'>>

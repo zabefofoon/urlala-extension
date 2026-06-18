@@ -1,8 +1,10 @@
 <script lang="ts">
+	import type { AddLinkInput } from '@/models/Item'
+	import { foldersStore } from '@/stores/folders.svelte'
 	import { Check as IconCheck, X as IconX } from 'lucide-svelte'
 	import { onMount } from 'svelte'
 
-	let link = $state({
+	let link = $state<AddLinkInput>({
 		thumbnail: undefined as string | undefined,
 		label: undefined as string | undefined,
 		memo: undefined as string | undefined,
@@ -17,6 +19,14 @@
 	}
 
 	const closePopup = () => window.close()
+
+	const saveLink = async () => {
+		try {
+			if (await foldersStore.addLink($state.snapshot(link))) closePopup()
+		} catch (error) {
+			console.error('Failed to save link:', error)
+		}
+	}
 
 	onMount(() => {
 		loadLink()
@@ -79,6 +89,7 @@
 		<button
 			type="button"
 			class="flex h-6.5 items-center gap-1 rounded-full bg-primary pl-2.5 pr-3 text-white shadow-sm transition hover:brightness-95"
+			onclick={saveLink}
 		>
 			<IconCheck size="12px" strokeWidth="3px" />
 			<span class="text-[12px] leading-none font-bold">추가</span>
