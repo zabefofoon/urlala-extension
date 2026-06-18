@@ -1,6 +1,7 @@
 <script lang="ts">
   import { cn } from '@/lib/utils/cn'
   import { Settings as IconSettings } from 'lucide-svelte'
+  import { authStore } from '@/stores/auth.svelte'
 
   interface Props {
     selectedMenu: 'add' | 'folders'
@@ -9,12 +10,22 @@
 
   const props: Props = $props()
 
+  const URLALA_BASE_URL = 'http://localhost:5173'
+
   const openOptionsPage = async () => {
     try {
       await browser.runtime.openOptionsPage()
     } catch (error) {
       console.error('Failed to open options page:', error)
     }
+  }
+
+  const login = async () => {
+    await browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })
+  }
+
+  const logout = async () => {
+    await authStore.clearTokens()
   }
 </script>
 
@@ -46,16 +57,17 @@
     </button>
   </div>
   <div class="flex items-center ml-auto">
-    {#if true}
+    {#if !authStore.isLoggedIn}
       <button
         type="button"
         class="flex items-center bg-primary text-white rounded-full px-2 py-1.5"
+        onclick={login}
       >
         <span class="text-[11px] leading-[100%]">로그인</span>
       </button>
     {:else}
-      <button type="button" class="flex items-center">
-        <span class="text-[11px] leading-[100%]">Hello, zabefofoon</span>
+      <button type="button" class="flex items-center" onclick={logout}>
+        <span class="text-[11px] leading-[100%]">로그아웃</span>
       </button>
     {/if}
     <button
