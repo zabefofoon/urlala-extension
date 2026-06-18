@@ -25,13 +25,19 @@
 	onMount(() => {
 		if (authStore.isLoggedIn) foldersStore.load()
 	})
+
+	$effect(() => {
+		if (authStore.isLoggedIn) foldersStore.load()
+	})
 </script>
 
 <div class="flex flex-1 flex-col overflow-hidden">
 	<div class="flex-1 flex flex-col overflow-auto">
-		<header class="flex items-center px-3 pt-2 shrink-0">
-			<PopupFoldersBreadcrumbs />
-		</header>
+		{#if foldersStore.pageResponse?.items.length}
+			<header class="flex items-center px-3 pt-2 shrink-0">
+				<PopupFoldersBreadcrumbs />
+			</header>
+		{/if}
 
 		<div class="flex flex-col px-3 py-2 h-full">
 			{#if !authStore.isLoggedIn}

@@ -6,15 +6,24 @@
 	import AppHeader from './AppHeader.svelte'
 
 	let selectedMenu = $state<'add' | 'folders'>('add')
-	const selectMenu = (value: 'add' | 'folders') => {
+	const selectMenu = async (value: 'add' | 'folders') => {
 		selectedMenu = value
+		await browser.storage.local.set({ selectedMenu: value })
 	}
 
 	const browerMessageHandler = (message: { type: string }) => {
 		if (message?.type === 'AUTH_SUCCESS') authStore.load()
 	}
 
+	const loadStoredMenu = async () => {
+		const stored = await browser.storage.local.get('selectedMenu')
+		if (stored.selectedMenu === 'add' || stored.selectedMenu === 'folders') {
+			selectedMenu = stored.selectedMenu
+		}
+	}
+
 	onMount(() => {
+		loadStoredMenu()
 		authStore.load()
 		browser.runtime.onMessage.addListener(browerMessageHandler)
 		return () => {

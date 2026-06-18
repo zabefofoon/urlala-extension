@@ -40,7 +40,13 @@
 			<IconChevronRight size="13px" class="shrink-0 text-text-secondary" />
 		</button>
 	{:else}
-		<div class="flex items-center gap-1.5 rounded-md border border-border px-2 py-1.5">
+		<a
+			class="flex items-center gap-1.5 rounded-md border border-border px-2 py-1.5"
+			href={props.item.url}
+			target="_blank"
+			rel="noopener noreferrer"
+			onclick={(e) => e.stopPropagation()}
+		>
 			{#if props.item.thumbnail}
 				<img
 					src={props.item.thumbnail}
@@ -51,15 +57,9 @@
 				<div class="h-3.5 w-3.5 shrink-0 rounded-sm bg-surface-elevated"></div>
 			{/if}
 			<span class="flex-1 truncate text-[12px] leading-none">{props.item.label}</span>
-			<a
-				href={props.item.url}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="shrink-0 text-text-secondary transition-colors hover:text-primary"
-				onclick={(e) => e.stopPropagation()}
-			>
+			<span class="shrink-0 text-text-secondary transition-colors hover:text-primary">
 				<IconArrowUpRight size="13px" />
-			</a>
-		</div>
+			</span>
+		</a>
 	{/if}
 </div>
