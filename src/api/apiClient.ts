@@ -12,6 +12,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(async (config) => {
 	const { accessToken } = await browser.storage.local.get('accessToken')
 	if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`
+
 	return config
 })
 
@@ -21,7 +22,10 @@ apiClient.interceptors.response.use(
 	async (error) => {
 		const originalRequest = error.config
 
-		if (error.response?.status !== 401 || originalRequest._retry) {
+		const status = error.response?.status
+		const isBadJwt = error.response?.data?.error_code === 'bad_jwt'
+		const shouldRetry = status === 401 || (status === 403 && isBadJwt)
+		if (!shouldRetry || originalRequest._retry) {
 			return Promise.reject(error)
 		}
 
