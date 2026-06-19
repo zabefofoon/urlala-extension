@@ -8,8 +8,14 @@
 
 	let loadMoreEl = $state<HTMLElement>()
 
-	const moveToUrlala = () => {
-		browser.tabs.create({ url: `https://urlala.pages.dev/folder/root` })
+	const moveToUrlala = async () => {
+		const { accessToken } = await browser.storage.local.get(['accessToken'])
+
+		const url = accessToken
+			? `https://urlala.pages.dev/external/login/token?accessToken=${encodeURIComponent(accessToken as string)}`
+			: `https://urlala.pages.dev/folder/root`
+
+		browser.tabs.create({ url })
 		window.close()
 	}
 
