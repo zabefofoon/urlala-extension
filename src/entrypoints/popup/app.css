@@ -21,6 +21,12 @@
 	--color-folder-violet: var(--color-violet-100);
 	--color-folder-blue: var(--color-blue-100);
 	--color-folder-green: var(--color-green-100);
+	--color-folder-border-yellow: var(--color-yellow-200);
+	--color-folder-border-orange: var(--color-orange-200);
+	--color-folder-border-red: var(--color-red-200);
+	--color-folder-border-violet: var(--color-violet-200);
+	--color-folder-border-blue: var(--color-blue-200);
+	--color-folder-border-green: var(--color-green-200);
 
 	--breakpoint-3xl: 1921px;
 }

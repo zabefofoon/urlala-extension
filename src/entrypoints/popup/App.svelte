@@ -3,7 +3,7 @@
 	import PopupFoldersContent from '@/components/PopupFoldersContent.svelte'
 	import { authStore } from '@/stores/auth.svelte'
 	import { onMount } from 'svelte'
-	import AppHeader from './AppHeader.svelte'
+	import AppHeader from '../../components/AppHeader.svelte'
 
 	let selectedMenu = $state<'add' | 'folders'>('add')
 	const selectMenu = async (value: 'add' | 'folders') => {

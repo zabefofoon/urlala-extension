@@ -1,0 +1,26 @@
+<div class="sr-only">
+	<div class="bg-folder-yellow"></div>
+	<div class="bg-folder-orange"></div>
+	<div class="bg-folder-red"></div>
+	<div class="bg-folder-violet"></div>
+	<div class="bg-folder-blue"></div>
+	<div class="bg-folder-green"></div>
+	<div class="border-folder-yellow"></div>
+	<div class="border-folder-orange"></div>
+	<div class="border-folder-red"></div>
+	<div class="border-folder-violet"></div>
+	<div class="border-folder-blue"></div>
+	<div class="border-folder-green"></div>
+	<div class="border-folder-border-yellow"></div>
+	<div class="border-folder-border-orange"></div>
+	<div class="border-folder-border-red"></div>
+	<div class="border-folder-border-violet"></div>
+	<div class="border-folder-border-blue"></div>
+	<div class="border-folder-border-green"></div>
+	<div class="dark:border-folder-yellow"></div>
+	<div class="dark:border-folder-orange"></div>
+	<div class="dark:border-folder-red"></div>
+	<div class="dark:border-folder-violet"></div>
+	<div class="dark:border-folder-blue"></div>
+	<div class="dark:border-folder-green"></div>
+</div>

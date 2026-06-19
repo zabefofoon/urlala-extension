@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '@/lib/utils/cn'
-	import type { Folder, Item } from '@/models/Item'
+	import { DEFAULT_FOLDER_COLOR, type Folder, type Item } from '@/models/Item'
 	import { foldersStore } from '@/stores/folders.svelte'
 	import {
 		ArrowUpRight as IconArrowUpRight,
@@ -14,14 +14,17 @@
 
 	const props: Props = $props()
 
-	const FOLDER_BG: Record<string, string> = {
-		yellow: 'bg-yellow-100',
-		orange: 'bg-orange-100',
-		red: 'bg-red-100',
-		violet: 'bg-violet-100',
-		blue: 'bg-blue-100',
-		green: 'bg-green-100'
-	}
+	const folderColor = $derived(
+		props.item.type === 'folder'
+			? `bg-folder-${props.item.color ?? DEFAULT_FOLDER_COLOR}`
+			: undefined
+	)
+	const borderColor = $derived.by(() => {
+		if (props.item.id === 'prev') return 'border-border'
+		return props.item.type === 'folder'
+			? `border-folder-border-${props.item.color ?? DEFAULT_FOLDER_COLOR} dark:border-folder-${props.item.color ?? DEFAULT_FOLDER_COLOR}`
+			: undefined
+	})
 </script>
 
 <div class="transition-opacity">
@@ -30,8 +33,11 @@
 			type="button"
 			class={cn([
 				'flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-left transition-all hover:brightness-95 ',
-				FOLDER_BG[props.item.color ?? 'yellow'],
-				{ 'bg-surface-elevated': props.item.id === 'prev' }
+				{
+					[`${folderColor} ${borderColor} border dark:bg-transparent`]:
+						props.item.type === 'folder',
+					'bg-surface-elevated': props.item.id === 'prev'
+				}
 			])}
 			onclick={() => foldersStore.enterFolder(props.item as Folder)}
 		>

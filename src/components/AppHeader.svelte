@@ -34,7 +34,7 @@
 	<div class="flex items-center ml-3 gap-2 shrink-0">
 		<button
 			type="button"
-			class={cn(['relative py-1', { 'text-primary': props.selectedMenu === 'add' }])}
+			class={cn(['relative py-1', { 'text-primary font-bold': props.selectedMenu === 'add' }])}
 			onclick={() => props.selectMenu('add')}
 		>
 			{#if props.selectedMenu === 'add'}
@@ -46,7 +46,7 @@
 		</button>
 		<button
 			type="button"
-			class={cn(['relative py-1', { 'text-primary': props.selectedMenu === 'folders' }])}
+			class={cn(['relative py-1', { 'text-primary font-bold': props.selectedMenu === 'folders' }])}
 			onclick={() => props.selectMenu('folders')}
 		>
 			{#if props.selectedMenu === 'folders'}
