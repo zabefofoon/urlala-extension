@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { URLALA_BASE_URL } from '@/const'
 	import { PREV_ITEM } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
@@ -12,8 +13,8 @@
 		const { accessToken } = await browser.storage.local.get(['accessToken'])
 
 		const url = accessToken
-			? `https://urlala.pages.dev/external/login/token?accessToken=${encodeURIComponent(accessToken as string)}`
-			: `https://urlala.pages.dev/folder/root`
+			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken as string)}`
+			: `${URLALA_BASE_URL}/folder/root`
 
 		browser.tabs.create({ url })
 		window.close()
@@ -88,23 +89,37 @@
 	<footer
 		class="shrink-0 bg-surface px-3 py-2 flex items-center justify-between border-t border-border"
 	>
-		<p class="text-[12px]">
-			폴더 관리는 <button
+		{#if authStore.isLoggedIn}
+			<p class="text-[12px]">
+				파일 관리는 <button
+					type="button"
+					class="inline text-primary underline font-bold"
+					onclick={moveToUrlala}
+				>
+					Urlala
+				</button>
+				에서 해주세요.
+			</p>
+			<button
 				type="button"
-				class="inline text-primary underline font-bold"
+				class="flex h-6.5 items-center gap-1 rounded-full bg-primary pl-2.5 pr-3 text-white shadow-sm transition hover:brightness-95"
 				onclick={moveToUrlala}
 			>
-				Urlala
+				<span class="text-[12px] leading-none font-bold">이동</span>
+				<IconChevronRight size="12px" strokeWidth="3px" />
 			</button>
-			에서 해주세요.
-		</p>
-		<button
-			type="button"
-			class="flex h-6.5 items-center gap-1 rounded-full bg-primary pl-2.5 pr-3 text-white shadow-sm transition hover:brightness-95"
-			onclick={moveToUrlala}
-		>
-			<span class="text-[12px] leading-none font-bold">이동</span>
-			<IconChevronRight size="12px" strokeWidth="3px" />
-		</button>
+		{:else}
+			<p class="w-full text-[12px] text-center text-text-secondary">
+				파일 관리는
+				<button
+					class="text-primary underline"
+					onclick={() =>
+						browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })}
+				>
+					로그인 후
+				</button>
+				해주세요.
+			</p>
+		{/if}
 	</footer>
 </div>

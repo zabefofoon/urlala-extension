@@ -67,7 +67,7 @@ class FoldersStore {
 
 		const stored = (await browser.storage.local.get('folders_path')) as { folders_path: Folder[] }
 		if (stored.folders_path) stored.folders_path.length = Object.keys(stored.folders_path).length
-		this.path = (Array.from(stored.folders_path) as Folder[] | undefined) ?? []
+		this.path = stored.folders_path ? Array.from(stored.folders_path) : []
 		this.isPathInitialized = true
 	}
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { URLALA_BASE_URL } from '@/const'
 	import { cn } from '@/lib/utils/cn'
 	import { authStore } from '@/stores/auth.svelte'
 	import { Settings as IconSettings } from 'lucide-svelte'
@@ -9,8 +10,6 @@
 	}
 
 	const props: Props = $props()
-
-	const URLALA_BASE_URL = 'https://urlala.pages.dev'
 
 	const openOptionsPage = async () => {
 		try {
