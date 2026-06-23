@@ -27,7 +27,7 @@
 	const saveLink = async () => {
 		try {
 			const item = $state.snapshot(link)
-			if (authStore.isLoggedIn) {
+			if (!authStore.isLoggedIn) {
 				const stored = await browser.storage.local.get(LOCAL_LINKS_KEY)
 				const savedLinks = ((stored[LOCAL_LINKS_KEY] as Link[] | undefined) ?? []).filter(
 					(link) => !link.deleted_at

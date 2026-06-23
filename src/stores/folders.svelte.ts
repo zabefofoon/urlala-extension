@@ -7,6 +7,7 @@ import { authStore } from './auth.svelte'
 class FoldersStore {
 	path = $state<Folder[]>([])
 	pageResponse = $state<PageResponse | undefined>()
+	localLinks = $state<Link[]>()
 	isLoading = $state(false)
 	private isPathInitialized = false
 
@@ -116,6 +117,15 @@ class FoldersStore {
 		}
 	}
 
+	async loadLocalLinks() {
+		const stored = await browser.storage.local.get(LOCAL_LINKS_KEY)
+		const savedLinks = ((stored[LOCAL_LINKS_KEY] as Link[] | undefined) ?? []).filter(
+			(link) => !link.deleted_at
+		)
+
+		this.localLinks = savedLinks ?? []
+	}
+
 	enterFolder(folder: Folder) {
 		if (folder.id === 'prev') {
 			this.path.pop()
@@ -193,7 +203,6 @@ class FoldersStore {
 		)
 		if (savedLinks.length >= LOCAL_LINK_LIMIT) return false
 
-		const url = new URL(rawUrl)
 		const nextItem = savedLinks[0]
 		const link: Link = {
 			id: crypto.randomUUID(),
@@ -201,7 +210,7 @@ class FoldersStore {
 			label: input.label?.trim() || rawUrl,
 			type: 'link',
 			url: rawUrl,
-			thumbnail: input.thumbnail || new URL('/favicon.ico', url.origin).href,
+			thumbnail: input.thumbnail,
 			locked: false,
 			memo: input.memo?.trim() || undefined,
 			sort_order: nextItem ? nextItem.sort_order - 1 : 0,
@@ -209,6 +218,32 @@ class FoldersStore {
 		}
 
 		await browser.storage.local.set({ [LOCAL_LINKS_KEY]: [link, ...savedLinks] })
+		return true
+	}
+
+	async removeLocalLink(id: string) {
+		const stored = await browser.storage.local.get(LOCAL_LINKS_KEY)
+		const savedLinks = (stored[LOCAL_LINKS_KEY] as Link[] | undefined) ?? []
+		const nextLinks = savedLinks.filter((link) => link.id !== id)
+
+		await browser.storage.local.set({ [LOCAL_LINKS_KEY]: nextLinks })
+		this.localLinks = nextLinks.filter((link) => !link.deleted_at)
+	}
+
+	async migrate() {
+		const userId = authStore.user?.id
+		if (!userId) return false
+
+		const stored = await browser.storage.local.get(LOCAL_LINKS_KEY)
+		const savedLinks = ((stored[LOCAL_LINKS_KEY] as Link[] | undefined) ?? []).filter(
+			(link) => !link.deleted_at
+		)
+		if (savedLinks.length === 0) return false
+
+		await itemsApi.saveMany(savedLinks, userId)
+		await browser.storage.local.remove(LOCAL_LINKS_KEY)
+		this.localLinks = []
+
 		return true
 	}
 }

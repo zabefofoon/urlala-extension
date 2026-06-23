@@ -1,6 +1,7 @@
 import { authApi } from '@/api/auth.api'
 import type { SupabaseUser } from '@/models/Auth'
 import dayjs from 'dayjs'
+import { foldersStore } from './folders.svelte'
 
 class AuthStore {
 	accessToken = $state<string | undefined>()
@@ -18,7 +19,10 @@ class AuthStore {
 		this.refreshToken = result.refreshToken as string
 		this.isLoaded = true
 
-		if (this.accessToken) await this.loadUser()
+		if (this.accessToken) {
+			await this.loadUser()
+			await foldersStore.migrate()
+		}
 	}
 
 	loadUser = async () => {

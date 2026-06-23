@@ -26,8 +26,11 @@
 	}
 
 	const items = $derived.by(() => {
-		const items = foldersStore.pageResponse?.items ?? []
-		return foldersStore.path.length ? [PREV_ITEM, ...items] : items
+		if (!authStore.isLoggedIn) return foldersStore.localLinks ?? []
+		else {
+			const items = foldersStore.pageResponse?.items ?? []
+			return foldersStore.path.length ? [PREV_ITEM, ...items] : items
+		}
 	})
 
 	$effect(() => {
@@ -40,13 +43,14 @@
 	})
 
 	$effect(() => {
-		if (authStore.user) foldersStore.restore()
+		if (authStore.isLoggedIn) foldersStore.restore()
+		else foldersStore.loadLocalLinks()
 	})
 </script>
 
 <div class="flex flex-1 flex-col overflow-hidden">
 	<div class="flex-1 flex flex-col overflow-auto">
-		{#if foldersStore.pageResponse?.items.length}
+		{#if items.length && authStore.isLoggedIn}
 			<header class="flex items-center px-3 pt-2 shrink-0">
 				<PopupFoldersBreadcrumbs />
 				<button
@@ -106,7 +110,6 @@
 			</button>
 		{:else}
 			<p class="w-full text-[12px] text-center text-text-secondary">
-				파일 관리는
 				<button
 					class="text-primary underline"
 					onclick={() =>
@@ -114,7 +117,7 @@
 				>
 					로그인 후
 				</button>
-				해주세요.
+				더 많은 기능을 사용하세요.
 			</p>
 		{/if}
 	</footer>

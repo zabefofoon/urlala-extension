@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { cn } from '@/lib/utils/cn'
 	import { DEFAULT_FOLDER_COLOR, type Folder, type Item } from '@/models/Item'
+	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
 	import {
 		ArrowUpRight as IconArrowUpRight,
 		ChevronRight as IconChevronRight,
-		Folder as IconFolder
+		Folder as IconFolder,
+		Link as IconLink,
+		X as IconX
 	} from 'lucide-svelte'
 
 	interface Props {
@@ -60,12 +63,26 @@
 					class="h-3.5 w-3.5 shrink-0 rounded-sm object-contain"
 				/>
 			{:else}
-				<div class="h-3.5 w-3.5 shrink-0 rounded-sm bg-surface-elevated"></div>
+				<div class="h-3.5 w-3.5 shrink-0 rounded-sm bg-surface-elevated grid place-items-center">
+					<IconLink size="11px" color="var(--color-text-primary)" />
+				</div>
 			{/if}
 			<span class="flex-1 truncate text-[12px] leading-none">{props.item.label}</span>
 			<span class="shrink-0 text-text-secondary transition-colors hover:text-primary">
 				<IconArrowUpRight size="13px" />
 			</span>
+			{#if !authStore.isLoggedIn}
+				<button
+					type="button"
+					class="text-text-secondary"
+					onclick={(event) => {
+						event.preventDefault()
+						foldersStore.removeLocalLink(props.item.id)
+					}}
+				>
+					<IconX size="13px" />
+				</button>
+			{/if}
 		</a>
 	{/if}
 </div>
