@@ -1,5 +1,7 @@
 <script lang="ts">
-	import type { AddLinkInput } from '@/models/Item'
+	import { LOCAL_LINK_LIMIT, LOCAL_LINKS_KEY } from '@/const'
+	import type { AddLinkInput, Link } from '@/models/Item'
+	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
 	import { Check as IconCheck, X as IconX } from 'lucide-svelte'
 	import { onMount } from 'svelte'
@@ -10,6 +12,8 @@
 		memo: undefined as string | undefined,
 		url: undefined as string | undefined
 	})
+
+	let errorMessage = $state('')
 
 	const loadLink = async () => {
 		const [tab] = await browser.tabs.query({ active: true, currentWindow: true })
@@ -22,7 +26,17 @@
 
 	const saveLink = async () => {
 		try {
-			if (await foldersStore.addLink($state.snapshot(link))) closePopup()
+			const item = $state.snapshot(link)
+			if (authStore.isLoggedIn) {
+				const stored = await browser.storage.local.get(LOCAL_LINKS_KEY)
+				const savedLinks = ((stored[LOCAL_LINKS_KEY] as Link[] | undefined) ?? []).filter(
+					(link) => !link.deleted_at
+				)
+				if (savedLinks.length >= LOCAL_LINK_LIMIT)
+					return (errorMessage = '비로그인 상태에서는 30개까지만 저장됩니다.')
+				else await foldersStore.addLinkLocal(item)
+			} else await foldersStore.addLink(item)
+			closePopup()
 		} catch (error) {
 			console.error('Failed to save link:', error)
 		}
@@ -75,6 +89,9 @@
 				</tr>
 			</tbody>
 		</table>
+		{#if errorMessage}
+			<p class="text-red-500 text-[11px] text-center mt-1">asd</p>
+		{/if}
 	</section>
 
 	<section class="mt-auto flex items-center gap-1.5 border-t border-border px-3 py-2">

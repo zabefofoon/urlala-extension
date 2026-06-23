@@ -1,15 +1,8 @@
 import { itemsApi } from '@/api/items.api'
-import type { AddLinkInput, Folder, Link, PageResponse } from '@/models/Item'
+import { CACHE_KEY_PREFIX, CACHE_TTL_MINUTES, LOCAL_LINKS_KEY, LOCAL_LINK_LIMIT } from '@/const'
+import type { AddLinkInput, CacheEntry, Folder, Link, PageResponse } from '@/models/Item'
 import dayjs from 'dayjs'
 import { authStore } from './auth.svelte'
-
-const CACHE_TTL_MINUTES = 60
-const CACHE_KEY_PREFIX = 'folders_cache:'
-
-interface CacheEntry {
-	pageResponse: PageResponse
-	expires_at: string
-}
 
 class FoldersStore {
 	path = $state<Folder[]>([])
@@ -187,6 +180,35 @@ class FoldersStore {
 
 		await browser.storage.local.remove(`${CACHE_KEY_PREFIX}${userId}:${parentId}`)
 
+		return true
+	}
+
+	async addLinkLocal(input: AddLinkInput) {
+		const rawUrl = input.url?.trim()
+		if (!rawUrl) return false
+
+		const stored = await browser.storage.local.get(LOCAL_LINKS_KEY)
+		const savedLinks = ((stored[LOCAL_LINKS_KEY] as Link[] | undefined) ?? []).filter(
+			(link) => !link.deleted_at
+		)
+		if (savedLinks.length >= LOCAL_LINK_LIMIT) return false
+
+		const url = new URL(rawUrl)
+		const nextItem = savedLinks[0]
+		const link: Link = {
+			id: crypto.randomUUID(),
+			parent_id: 'root',
+			label: input.label?.trim() || rawUrl,
+			type: 'link',
+			url: rawUrl,
+			thumbnail: input.thumbnail || new URL('/favicon.ico', url.origin).href,
+			locked: false,
+			memo: input.memo?.trim() || undefined,
+			sort_order: nextItem ? nextItem.sort_order - 1 : 0,
+			collectable: true
+		}
+
+		await browser.storage.local.set({ [LOCAL_LINKS_KEY]: [link, ...savedLinks] })
 		return true
 	}
 }

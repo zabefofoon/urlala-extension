@@ -61,11 +61,7 @@
 		{/if}
 
 		<div class="flex flex-col px-3 py-2 h-full mb-5">
-			{#if !authStore.isLoggedIn}
-				<p class="py-6 text-center text-[12px] text-text-secondary">
-					로그인 후 이용할 수 있습니다.
-				</p>
-			{:else if foldersStore.isLoading}
+			{#if foldersStore.isLoading}
 				<div class="flex flex-col gap-1">
 					{#each Array(2)}
 						<div class="h-8 animate-pulse rounded-md bg-surface-elevated"></div>

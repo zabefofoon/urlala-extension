@@ -61,4 +61,9 @@ export const PREV_ITEM: Folder = {
 	sort_order: -1
 }
 
+export interface CacheEntry {
+	pageResponse: PageResponse
+	expires_at: string
+}
+
 export type AddLinkInput = Partial<Pick<Link, 'label' | 'memo' | 'thumbnail' | 'url'>>

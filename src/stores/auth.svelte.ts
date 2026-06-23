@@ -9,7 +9,7 @@ class AuthStore {
 	isLoaded = $state(false)
 
 	get isLoggedIn() {
-		return !!this.accessToken
+		return !!this.user?.id
 	}
 
 	load = async () => {
