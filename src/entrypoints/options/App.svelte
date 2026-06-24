@@ -167,6 +167,7 @@
 								<button
 									type="button"
 									class="text-[13px] text-text-secondary flex items-center gap-1"
+									disabled
 								>
 									시스템
 									<IconChevronDown size="12px" />
@@ -213,6 +214,7 @@
 								<button
 									type="button"
 									class="text-[13px] text-text-secondary flex items-center gap-1"
+									disabled
 								>
 									시스템
 									<IconChevronDown size="12px" />
@@ -333,8 +335,8 @@
 		</div>
 		<div class="mt-4">
 			<div class="flex items-center justify-center gap-2 text-[12px]">
-				<a>개인정보처리</a>
-				<a>이용약관</a>
+				<a href={`${URLALA_BASE_URL}/terms`}>개인정보처리</a>
+				<a href={`${URLALA_BASE_URL}/privacy`}>이용약관</a>
 			</div>
 			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.0</p>
 		</div>
