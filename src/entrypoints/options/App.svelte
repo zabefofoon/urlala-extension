@@ -1,10 +1,28 @@
 <script lang="ts">
+	import { URLALA_BASE_URL } from '@/const'
 	import { authStore } from '@/stores/auth.svelte'
-	import { Bell, Database, Folder, LogOut, UserRound } from 'lucide-svelte'
+	import {
+		AppWindow as IconAppWindow,
+		Database as IconDatabase,
+		House as IconHouse,
+		Languages as IconLanguages,
+		Library as IconLibrary,
+		LogIn as IconLogIn,
+		LogOut as IconLogOut,
+		MonitorSmartphone as IconMonitorSmartphone,
+		SunMoon as IconSunMoon,
+		Trash as IconTrash,
+		UserPen as IconUserPen,
+		UserRound as IconUserRound
+	} from 'lucide-svelte'
 	import { onMount } from 'svelte'
 
 	const browerMessageHandler = (message: { type: string }) => {
 		if (message?.type === 'AUTH_SUCCESS') authStore.load()
+	}
+
+	const login = async () => {
+		await browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })
 	}
 
 	onMount(() => {
@@ -22,78 +40,215 @@
 
 <main class="min-h-screen bg-surface-section text-text-primary">
 	<section class="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 py-8">
-		<header class="border-b border-border pb-5">
-			<p class="text-[12px] font-medium uppercase text-primary">Options</p>
-			<h1 class="mt-1 text-2xl font-semibold">Urlala 설정</h1>
+		<header>
+			<h1 class="text-2xl font-semibold">Urlala 설정</h1>
 		</header>
-
-		<div class="grid gap-3 py-6 sm:grid-cols-2">
-			<!-- 계정 -->
-			<article class="rounded-lg border border-border bg-surface p-4">
-				<UserRound size="20px" class="text-primary" />
-				<h2 class="mt-3 text-sm font-semibold">계정</h2>
-				{#if !authStore.isLoaded}
-					<div class="mt-3 h-10 animate-pulse rounded-md bg-surface-section"></div>
-				{:else if !authStore.isLoggedIn}
-					<p class="mt-2 text-[13px] text-text-secondary">로그인되지 않았습니다.</p>
-				{:else}
-					<div class="mt-3 flex items-center gap-3">
-						{#if authStore.user?.user_metadata?.avatar_url}
-							<img
-								src={authStore.user.user_metadata.avatar_url}
-								alt="프로필"
-								class="h-9 w-9 rounded-full object-cover"
-							/>
-						{:else}
-							<div
-								class="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary"
-							>
-								<UserRound size="18px" />
+		<div>
+			<article class="border-b border-border py-6">
+				<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
+					<IconUserRound size="16px" strokeWidth="2" />
+					계정
+				</p>
+				<div class="flex flex-col gap-4">
+					<div class="flex items-center gap-3">
+						{#if authStore.user}
+							<div class="flex items-center flex-1 gap-2">
+								<img
+									src={authStore.user.user_metadata.avatar_url}
+									alt="프로필"
+									class="h-9 w-9 rounded-full object-cover"
+								/>
+								<div>
+									<p class="truncate font-medium">
+										{authStore.user.user_metadata.full_name}
+									</p>
+									<p class="truncate text-[12px] text-text-secondary">{authStore.user?.email}</p>
+								</div>
 							</div>
+							<button
+								type="button"
+								class="shrink-0 text-text-secondary flex items-center gap-2"
+								title="로그아웃"
+								onclick={logout}
+							>
+								<span class="text-[13px]">로그아웃</span>
+								<IconLogOut size="13px" />
+							</button>
+						{:else}
+							<div class="flex items-center flex-1 gap-2">
+								<div
+									class="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary"
+								>
+									<IconUserRound size="18px" />
+								</div>
+								<p class="truncate text-text-secondary">게스트</p>
+							</div>
+							<button
+								type="button"
+								class="shrink-0 text-text-secondary flex items-center gap-2"
+								title="로그아웃"
+								onclick={login}
+							>
+								<span class="text-[13px]">로그인</span>
+								<IconLogIn size="13px" />
+							</button>
 						{/if}
-						<div class="min-w-0 flex-1">
-							{#if authStore.user?.user_metadata?.full_name}
-								<p class="truncate text-[13px] font-medium">
-									{authStore.user.user_metadata.full_name}
-								</p>
-							{/if}
-							<p class="truncate text-[12px] text-text-secondary">{authStore.user?.email}</p>
+					</div>
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2">
+							<IconUserPen size="18px" />
+							<p class="truncate">프로필 변경</p>
 						</div>
 						<button
 							type="button"
-							class="shrink-0 text-text-secondary hover:text-red-500 transition-colors"
+							class="shrink-0 text-text-secondary flex items-center gap-2"
 							title="로그아웃"
-							onclick={logout}
+							onclick={login}
 						>
-							<LogOut size="16px" />
+							<span class="text-[13px]">로그인</span>
+							<IconLogIn size="13px" />
 						</button>
 					</div>
-				{/if}
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2 text-red-500">
+							<IconTrash size="18px" />
+							<p class="truncate">회원탈퇴</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-text-secondary flex items-center gap-2"
+							title="로그아웃"
+							onclick={login}
+						>
+							<span class="text-[13px]">로그인</span>
+							<IconLogIn size="13px" />
+						</button>
+					</div>
+				</div>
 			</article>
-
-			<article class="rounded-lg border border-border bg-surface p-4">
-				<Folder size="20px" class="text-primary" />
-				<h2 class="mt-3 text-sm font-semibold">폴더 기본값</h2>
-				<p class="mt-1 text-[13px] leading-5 text-text-secondary">
-					새 URL을 저장할 기본 폴더나 정렬 기준을 둘 수 있습니다.
+			<article class="border-b border-border py-6">
+				<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
+					<IconAppWindow size="16px" strokeWidth="2" />
+					화면 설정
 				</p>
+				<div class="flex flex-col gap-4">
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2 text-text-secondary">
+							<IconLanguages size="18px" />
+							<p class="truncate">언어</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-text-secondary flex items-center gap-2"
+							title="로그아웃"
+							onclick={login}
+						>
+							<span class="text-[13px]">로그인</span>
+							<IconLogIn size="13px" />
+						</button>
+					</div>
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2 text-text-secondary">
+							<IconSunMoon size="18px" />
+							<p class="truncate">다크모드</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-text-secondary flex items-center gap-2"
+							title="로그아웃"
+							onclick={login}
+						>
+							<span class="text-[13px]">로그인</span>
+							<IconLogIn size="13px" />
+						</button>
+					</div>
+				</div>
 			</article>
-
-			<article class="rounded-lg border border-border bg-surface p-4">
-				<Bell size="20px" class="text-primary" />
-				<h2 class="mt-3 text-sm font-semibold">알림</h2>
-				<p class="mt-1 text-[13px] leading-5 text-text-secondary">
-					저장 완료, 실패, 중복 URL 안내 같은 알림 옵션 자리입니다.
+			{#if !authStore.isLoggedIn}
+				<article class="border-b border-border py-6">
+					<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
+						<IconDatabase size="16px" strokeWidth="2" />
+						데이터 설정
+					</p>
+					<div class="flex flex-col gap-4">
+						<div class="flex items-center gap-3">
+							<div class="flex items-center flex-1 gap-2 text-text-secondary">
+								<IconLanguages size="18px" />
+								<p class="truncate">데이터 초기화</p>
+							</div>
+							<button
+								type="button"
+								class="shrink-0 text-text-secondary flex items-center gap-2"
+								title="로그아웃"
+								onclick={login}
+							>
+								<span class="text-[13px]">로그인</span>
+								<IconLogIn size="13px" />
+							</button>
+						</div>
+					</div>
+				</article>
+			{/if}
+			<article class="border-b border-border py-6">
+				<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
+					<IconMonitorSmartphone size="16px" strokeWidth="2" />
+					앱 정보
 				</p>
+				<div class="flex flex-col gap-4">
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2 text-text-secondary">
+							<IconHouse size="18px" />
+							<p class="truncate">Urlala</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-text-secondary flex items-center gap-2"
+							title="로그아웃"
+							onclick={login}
+						>
+							<span class="text-[13px]">로그인</span>
+							<IconLogIn size="13px" />
+						</button>
+					</div>
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2 text-text-secondary">
+							<IconLanguages size="18px" />
+							<p class="truncate">앱 다운로드</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-text-secondary flex items-center gap-2"
+							title="로그아웃"
+							onclick={login}
+						>
+							<span class="text-[13px]">로그인</span>
+							<IconLogIn size="13px" />
+						</button>
+					</div>
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2 text-text-secondary">
+							<IconLibrary size="18px" />
+							<p class="truncate">이용가이드</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-text-secondary flex items-center gap-2"
+							title="로그아웃"
+							onclick={login}
+						>
+							<span class="text-[13px]">로그인</span>
+							<IconLogIn size="13px" />
+						</button>
+					</div>
+				</div>
 			</article>
-
-			<article class="rounded-lg border border-border bg-surface p-4">
-				<Database size="20px" class="text-primary" />
-				<h2 class="mt-3 text-sm font-semibold">데이터</h2>
-				<p class="mt-1 text-[13px] leading-5 text-text-secondary">
-					내보내기, 가져오기, Supabase 동기화 설정을 둘 수 있습니다.
-				</p>
-			</article>
+		</div>
+		<div class="mt-4">
+			<div class="flex items-center justify-center gap-2 text-[12px]">
+				<a>개인정보처리</a>
+				<a>이용약관</a>
+			</div>
+			<p class="text-text-secondary text-center text-[12px]">Urala Extension 1.0.0</p>
 		</div>
 	</section>
 </main>
