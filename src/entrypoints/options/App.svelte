@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ModalInit from '@/components/ModalInit.svelte'
 	import UIDropdown from '@/components/UIDropdown.svelte'
 	import { URLALA_BASE_URL } from '@/const'
 	import { authStore } from '@/stores/auth.svelte'
@@ -22,6 +23,8 @@
 		UserX as IconUserX
 	} from 'lucide-svelte'
 	import { onMount } from 'svelte'
+
+	let isShowInitModal = $state(false)
 
 	const browerMessageHandler = (message: { type: string }) => {
 		if (message?.type === 'AUTH_SUCCESS') authStore.load()
@@ -56,6 +59,9 @@
 </script>
 
 <main class="min-h-screen bg-surface-section text-text-primary">
+	{#if isShowInitModal}
+		<ModalInit close={() => (isShowInitModal = false)} />
+	{/if}
 	<section class="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 py-8">
 		<header>
 			<h1 class="text-2xl font-semibold">Urlala 설정</h1>
@@ -261,6 +267,7 @@
 								type="button"
 								class="shrink-0 text-red-500 flex items-center border border-red-500 rounded-full py-0.5 px-1.5"
 								title="초기화"
+								onclick={() => (isShowInitModal = true)}
 							>
 								<span class="text-[12px] font-bold">초기화</span>
 							</button>
