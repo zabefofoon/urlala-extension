@@ -11,10 +11,10 @@
 	let loadMoreEl = $state<HTMLElement>()
 
 	const moveToUrlala = async () => {
-		const { accessToken } = await browser.storage.local.get(['accessToken'])
+		const accessToken = await authStore.getValidAccessToken()
 
 		const url = accessToken
-			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken as string)}`
+			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken)}`
 			: `${URLALA_BASE_URL}/folder/root`
 
 		browser.tabs.create({ url })

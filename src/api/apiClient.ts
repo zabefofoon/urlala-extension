@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const SUPABASE_URL = 'https://qanwlpeiztsrizmrzahr.supabase.co'
-const SUPABASE_ANON_KEY = 'sb_publishable_reAV_hd_IW8MdXUpVIvR1g_34mB-hKB'
+export const SUPABASE_URL = 'https://qanwlpeiztsrizmrzahr.supabase.co'
+export const SUPABASE_ANON_KEY = 'sb_publishable_reAV_hd_IW8MdXUpVIvR1g_34mB-hKB'
 
 export const apiClient = axios.create({
 	baseURL: SUPABASE_URL,

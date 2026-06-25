@@ -52,6 +52,36 @@ class AuthStore {
 		}
 	}
 
+	getValidAccessToken = async (): Promise<string | undefined> => {
+		const token = this.accessToken
+		if (!token) return undefined
+
+		try {
+			const payload = JSON.parse(atob(token.split('.')[1]))
+			if (payload.exp * 1000 > Date.now()) return token
+		} catch {
+			return token
+		}
+
+		if (!this.refreshToken) return undefined
+
+		try {
+			const { data } = await authApi.refreshTokens(this.refreshToken)
+
+			await browser.storage.local.set({
+				accessToken: data.access_token,
+				refreshToken: data.refresh_token
+			})
+
+			this.accessToken = data.access_token
+			this.refreshToken = data.refresh_token
+
+			return data.access_token
+		} catch {
+			return undefined
+		}
+	}
+
 	clearTokens = async () => {
 		this.accessToken = undefined
 		this.refreshToken = undefined

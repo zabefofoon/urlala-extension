@@ -32,10 +32,10 @@
 	}
 
 	const moveToUrlala = async (next?: string) => {
-		const { accessToken } = await browser.storage.local.get(['accessToken'])
+		const accessToken = await authStore.getValidAccessToken()
 
 		const url = accessToken
-			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken as string)}&next=${next}`
+			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken)}&next=${next}`
 			: `${URLALA_BASE_URL}?next=${next}`
 
 		browser.tabs.create({ url })
