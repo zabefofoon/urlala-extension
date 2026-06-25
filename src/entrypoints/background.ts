@@ -2,9 +2,36 @@ import { authApi } from '@/api/auth.api'
 import { itemsApi } from '@/api/items.api'
 import { CACHE_KEY_PREFIX, LOCAL_LINK_LIMIT, LOCAL_LINKS_KEY } from '@/const'
 import type { SupabaseUser } from '@/models/Auth'
-import type { Folder, Link, SafariContextMenuCreateProperties } from '@/models/Item'
+import type { Folder, Link } from '@/models/Item'
 
 const SAVE_PAGE_MENU_ID = 'urlala-save-page'
+
+type SafariContextMenuCreateProperties = Browser.contextMenus.CreateProperties & {
+	icons: Record<number, string>
+}
+
+const createSavePageMenu = (): Browser.contextMenus.CreateProperties => {
+	const menu: Browser.contextMenus.CreateProperties = {
+		id: SAVE_PAGE_MENU_ID,
+		title: browser.i18n.getMessage('savePage'),
+		contexts: ['page']
+	}
+
+	if (!import.meta.env.SAFARI) return menu
+
+	const safariMenu: SafariContextMenuCreateProperties = {
+		...menu,
+		icons: {
+			16: '/icon/16.png',
+			32: '/icon/32.png',
+			48: '/icon/48.png',
+			96: '/icon/96.png',
+			128: '/icon/128.png'
+		}
+	}
+
+	return safariMenu
+}
 
 const createLinkFromPage = (input: {
 	pageUrl: string
@@ -87,20 +114,7 @@ const savePageToLocal = async (pageUrl: string, tab?: Browser.tabs.Tab) => {
 
 export default defineBackground(() => {
 	browser.contextMenus.removeAll().then(() => {
-		const savePageMenu: SafariContextMenuCreateProperties = {
-			id: SAVE_PAGE_MENU_ID,
-			title: browser.i18n.getMessage('savePage'),
-			contexts: ['page'],
-			icons: {
-				16: '/icon/16.png',
-				32: '/icon/32.png',
-				48: '/icon/48.png',
-				96: '/icon/96.png',
-				128: '/icon/128.png'
-			}
-		}
-
-		browser.contextMenus.create(savePageMenu)
+		browser.contextMenus.create(createSavePageMenu())
 	})
 
 	browser.contextMenus.onClicked.addListener(async (info, tab) => {
