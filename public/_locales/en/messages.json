@@ -1,5 +1,11 @@
 {
 	"savePage": {
 		"message": "Save current page"
+	},
+	"extensionName": {
+		"message": "Urlala - Link Saver & Bookmark Manager"
+	},
+	"extensionDescription": {
+		"message": "Save the page you're looking at, right now. Organize bookmarks and links into folders and find them fast whenever you need."
 	}
 }

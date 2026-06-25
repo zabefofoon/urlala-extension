@@ -1,5 +1,11 @@
 {
 	"savePage": {
 		"message": "현재 페이지 저장"
+	},
+	"extensionName": {
+		"message": "Urlala - 링크 저장 및 북마크 관리"
+	},
+	"extensionDescription": {
+		"message": "지금 보는 페이지, 바로 저장하세요. 북마크와 링크를 폴더로 정리하고 필요할 때 빠르게 찾아보세요."
 	}
 }

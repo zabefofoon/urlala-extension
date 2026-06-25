@@ -8,6 +8,8 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
 		default_locale: 'en',
+		name: '__MSG_extensionName__',
+		description: '__MSG_extensionDescription__',
 		permissions: ['contextMenus', 'tabs', 'storage'],
 		action: {
 			default_icon: {
