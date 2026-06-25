@@ -112,6 +112,20 @@ const savePageToLocal = async (pageUrl: string, tab?: Browser.tabs.Tab) => {
 	return true
 }
 
+const notifySaveSuccess = async (tab?: Browser.tabs.Tab, folderName?: string): Promise<void> => {
+	if (!tab?.id) return
+
+	const text = folderName
+		? browser.i18n.getMessage('saveSuccessInFolder', [folderName])
+		: browser.i18n.getMessage('saveSuccess')
+
+	await browser.tabs
+		.sendMessage(tab.id, { type: 'SAVE_SUCCESS', text })
+		.catch((error: unknown) => {
+			console.warn('Failed to notify save success:', { error })
+		})
+}
+
 export default defineBackground(() => {
 	browser.contextMenus.removeAll().then(() => {
 		browser.contextMenus.create(createSavePageMenu())
@@ -124,9 +138,16 @@ export default defineBackground(() => {
 			const pageUrl = info.pageUrl ?? tab?.url
 			if (pageUrl) {
 				const { accessToken } = await browser.storage.local.get('accessToken')
-				return accessToken
+				const isSaved = accessToken
 					? await savePageToRemote(pageUrl, tab)
 					: await savePageToLocal(pageUrl, tab)
+				if (isSaved) {
+					const stored = (await browser.storage.local.get('folders_path')) as { folders_path?: Folder[] }
+					const currentFolder = stored.folders_path ? Array.from(stored.folders_path).at(-1) : undefined
+					const folderName = accessToken && currentFolder ? currentFolder.label : undefined
+					await notifySaveSuccess(tab, folderName)
+				}
+				return isSaved
 			}
 		} catch (error) {
 			console.error('Failed to save context menu page:', error)

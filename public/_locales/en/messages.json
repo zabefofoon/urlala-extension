@@ -2,6 +2,17 @@
 	"savePage": {
 		"message": "Save page"
 	},
+	"saveSuccess": {
+		"message": "Saved successfully."
+	},
+	"saveSuccessInFolder": {
+		"message": "Saved to $FOLDER_NAME$ folder.",
+		"placeholders": {
+			"folder_name": {
+				"content": "$1"
+			}
+		}
+	},
 	"extensionName": {
 		"message": "Urlala - Link Saver & Bookmark Manager"
 	},

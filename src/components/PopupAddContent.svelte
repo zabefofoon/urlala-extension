@@ -7,6 +7,20 @@
 	import { Check as IconCheck, X as IconX } from 'lucide-svelte'
 	import { onMount } from 'svelte'
 
+	const notifySaveSuccess = async () => {
+		const currentFolder = authStore.isLoggedIn ? foldersStore.currentFolder : undefined
+		const text = currentFolder
+			? browser.i18n.getMessage('saveSuccessInFolder', [currentFolder.label])
+			: browser.i18n.getMessage('saveSuccess')
+
+		try {
+			const [tab] = await browser.tabs.query({ active: true, currentWindow: true })
+			if (tab.id) await browser.tabs.sendMessage(tab.id, { type: 'SAVE_SUCCESS', text })
+		} catch {
+			// content script가 없는 페이지(chrome://, about:// 등)에서는 무시
+		}
+	}
+
 	let link = $state<AddLinkInput>({
 		thumbnail: undefined as string | undefined,
 		label: undefined as string | undefined,
@@ -37,6 +51,7 @@
 					return (errorMessage = m.LimitWarning())
 				else await foldersStore.addLinkLocal(item)
 			} else await foldersStore.addLink(item)
+			notifySaveSuccess()
 			closePopup()
 		} catch (error) {
 			console.error('Failed to save link:', error)

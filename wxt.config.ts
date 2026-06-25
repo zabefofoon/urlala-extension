@@ -13,6 +13,12 @@ export default defineConfig({
 		name: '__MSG_extensionName__',
 		description: '__MSG_extensionDescription__',
 		permissions: ['contextMenus', 'tabs', 'storage'],
+		web_accessible_resources: [
+			{
+				resources: ['icon/*.png'],
+				matches: ['<all_urls>']
+			}
+		],
 		action: {
 			default_icon: {
 				16: 'icon/16.png',

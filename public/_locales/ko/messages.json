@@ -2,6 +2,17 @@
 	"savePage": {
 		"message": "페이지 저장"
 	},
+	"saveSuccess": {
+		"message": "저장되었습니다."
+	},
+	"saveSuccessInFolder": {
+		"message": "$FOLDER_NAME$ 폴더에 저장되었습니다.",
+		"placeholders": {
+			"folder_name": {
+				"content": "$1"
+			}
+		}
+	},
 	"extensionName": {
 		"message": "Urlala - 링크 저장 및 북마크 관리"
 	},
