@@ -7,7 +7,6 @@
 	import {
 		AppWindow as IconAppWindow,
 		Check as IconCheck,
-		ChevronDown as IconChevronDown,
 		ChevronRight as IconChevronRight,
 		Database as IconDatabase,
 		House as IconHouse,
@@ -15,6 +14,7 @@
 		Library as IconLibrary,
 		LogIn as IconLogIn,
 		LogOut as IconLogOut,
+		MessageSquareMore as IconMessageSquareMore,
 		MonitorSmartphone as IconMonitorSmartphone,
 		Smartphone as IconSmartPhone,
 		SunMoon as IconSunMoon,
@@ -171,7 +171,6 @@
 									disabled
 								>
 									{m.System()}
-									<IconChevronDown size="12px" />
 								</button>
 							{/snippet}
 							{#snippet menus()}
@@ -218,7 +217,6 @@
 									disabled
 								>
 									{m.System()}
-									<IconChevronDown size="12px" />
 								</button>
 							{/snippet}
 							{#snippet menus()}
@@ -328,6 +326,21 @@
 							onclick={() => moveToUrlala('/guides')}
 						>
 							<span class="text-[13px]">{m.ViewGuide()}</span>
+							<IconChevronRight size="13px" />
+						</button>
+					</div>
+					<div class="flex items-center gap-3">
+						<div class="flex items-center flex-1 gap-2 text-text-secondary">
+							<IconMessageSquareMore size="18px" />
+							<p class="truncate text-[14px]">{m.Contact()}</p>
+						</div>
+						<button
+							type="button"
+							class="shrink-0 text-text-secondary flex items-center gap-1"
+							title={m.ViewGuide()}
+							onclick={() => moveToUrlala('/contact')}
+						>
+							<span class="text-[13px]">{m.GoTo()}</span>
 							<IconChevronRight size="13px" />
 						</button>
 					</div>

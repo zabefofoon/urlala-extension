@@ -1,4 +1,3 @@
-import { URLALA_BASE_URL } from '@/const'
 import { paraglideVitePlugin } from '@inlang/paraglide-js'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'wxt'
@@ -9,7 +8,7 @@ export default defineConfig({
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
 		version: '1.0.0',
-		homepage_url: URLALA_BASE_URL,
+		homepage_url: 'https://urlala.pages.dev',
 		default_locale: 'en',
 		name: '__MSG_extensionName__',
 		description: '__MSG_extensionDescription__',
