@@ -2,6 +2,7 @@
 	import ModalInit from '@/components/ModalInit.svelte'
 	import UIDropdown from '@/components/UIDropdown.svelte'
 	import { URLALA_BASE_URL } from '@/const'
+	import { m } from '@/lib/paraglide/messages'
 	import { authStore } from '@/stores/auth.svelte'
 	import {
 		AppWindow as IconAppWindow,
@@ -64,13 +65,13 @@
 	{/if}
 	<section class="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 py-8">
 		<header>
-			<h1 class="text-2xl font-semibold">Urlala 설정</h1>
+			<h1 class="text-2xl font-semibold">{m.Settings()}</h1>
 		</header>
 		<div>
 			<article class="border-b border-border py-6">
 				<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
 					<IconUserRound size="16px" strokeWidth="2" />
-					계정
+					{m.Account()}
 				</p>
 				<div class="flex flex-col gap-4">
 					<div class="flex items-center gap-3">
@@ -78,7 +79,7 @@
 							<div class="flex items-center flex-1 gap-2">
 								<img
 									src={authStore.user.user_metadata.avatar_url}
-									alt="프로필"
+									alt={m.Profile()}
 									class="h-9 w-9 rounded-full object-cover"
 								/>
 								<div>
@@ -91,10 +92,10 @@
 							<button
 								type="button"
 								class="shrink-0 text-text-secondary flex items-center gap-2"
-								title="로그아웃"
+								title={m.Logout()}
 								onclick={logout}
 							>
-								<span class="text-[13px]">로그아웃</span>
+								<span class="text-[13px]">{m.Logout()}</span>
 								<IconLogOut size="13px" />
 							</button>
 						{:else}
@@ -104,15 +105,15 @@
 								>
 									<IconUserRound size="18px" />
 								</div>
-								<p class="truncate text-text-secondary">게스트</p>
+								<p class="truncate text-text-secondary">{m.Guest()}</p>
 							</div>
 							<button
 								type="button"
 								class="shrink-0 text-text-secondary flex items-center gap-2"
-								title="로그아웃"
+								title={m.Logout()}
 								onclick={login}
 							>
-								<span class="text-[13px]">로그인</span>
+								<span class="text-[13px]">{m.Login()}</span>
 								<IconLogIn size="13px" />
 							</button>
 						{/if}
@@ -121,30 +122,30 @@
 						<div class="flex items-center gap-3">
 							<div class="flex items-center flex-1 gap-2">
 								<IconUserPen size="18px" />
-								<p class="truncate text-[14px]">프로필 변경</p>
+								<p class="truncate text-[14px]">{m.ChangeProfile()}</p>
 							</div>
 							<button
 								type="button"
 								class="shrink-0 text-text-secondary flex items-center gap-1"
-								title="로그아웃"
+								title={m.Logout()}
 								onclick={() => moveToUrlala('/settings/profile')}
 							>
-								<span class="text-[13px]">변경하기</span>
+								<span class="text-[13px]">{m.Change()}</span>
 								<IconChevronRight size="13px" />
 							</button>
 						</div>
 						<div class="flex items-center gap-3">
 							<div class="flex items-center flex-1 gap-2 text-red-500">
 								<IconUserX size="18px" />
-								<p class="truncate text-[14px]">회원탈퇴</p>
+								<p class="truncate text-[14px]">{m.WithdrawMembership()}</p>
 							</div>
 							<button
 								type="button"
 								class="shrink-0 text-text-secondary flex items-center gap-1"
-								title="탈퇴하기"
+								title={m.WithdrawBtn()}
 								onclick={() => moveToUrlala('/leave')}
 							>
-								<span class="text-[13px]">탈퇴하기</span>
+								<span class="text-[13px]">{m.WithdrawBtn()}</span>
 								<IconChevronRight size="13px" />
 							</button>
 						</div>
@@ -154,13 +155,13 @@
 			<article class="border-b border-border py-6">
 				<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
 					<IconAppWindow size="16px" strokeWidth="2" />
-					화면 설정
+					{m.DisplaySettings()}
 				</p>
 				<div class="flex flex-col gap-4">
 					<div class="flex items-center gap-3">
 						<div class="flex items-center flex-1 gap-2 text-text-secondary">
 							<IconLanguages size="18px" />
-							<p class="truncate text-[14px]">언어</p>
+							<p class="truncate text-[14px]">{m.Language()}</p>
 						</div>
 						<UIDropdown id="language">
 							{#snippet trigger()}
@@ -169,7 +170,7 @@
 									class="text-[13px] text-text-secondary flex items-center gap-1"
 									disabled
 								>
-									시스템
+									{m.System()}
 									<IconChevronDown size="12px" />
 								</button>
 							{/snippet}
@@ -178,7 +179,7 @@
 									type="button"
 									class="gap-2 px-2 py-1.5 flex w-full items-center justify-between text-left text-[12px] text-text-primary"
 								>
-									<span class="whitespace-nowrap">시스템</span>
+									<span class="whitespace-nowrap">{m.System()}</span>
 									{#if true}
 										<IconCheck size="13px" color="var(--color-primary)" />
 									{/if}
@@ -207,7 +208,7 @@
 					<div class="flex items-center gap-3">
 						<div class="flex items-center flex-1 gap-2 text-text-secondary">
 							<IconSunMoon size="18px" />
-							<p class="truncate text-[14px]">테마</p>
+							<p class="truncate text-[14px]">{m.Theme()}</p>
 						</div>
 						<UIDropdown id="theme">
 							{#snippet trigger()}
@@ -216,7 +217,7 @@
 									class="text-[13px] text-text-secondary flex items-center gap-1"
 									disabled
 								>
-									시스템
+									{m.System()}
 									<IconChevronDown size="12px" />
 								</button>
 							{/snippet}
@@ -225,7 +226,7 @@
 									type="button"
 									class="gap-2 px-2 py-1.5 flex w-full items-center justify-between text-left text-[12px] text-text-primary"
 								>
-									<span class="whitespace-nowrap">시스템</span>
+									<span class="whitespace-nowrap">{m.System()}</span>
 									{#if true}
 										<IconCheck size="13px" color="var(--color-primary)" />
 									{/if}
@@ -234,7 +235,7 @@
 									type="button"
 									class="gap-2 px-2 py-1.5 flex w-full items-center justify-between text-left text-[12px] text-text-secondary"
 								>
-									<span class="whitespace-nowrap">라이트</span>
+									<span class="whitespace-nowrap">{m.Light()}</span>
 									{#if false}
 										<IconCheck size="13px" color="var(--color-primary)" />
 									{/if}
@@ -243,7 +244,7 @@
 									type="button"
 									class="gap-2 px-2 py-1.5 flex w-full items-center justify-between text-left text-[12px] text-text-secondary"
 								>
-									<span class="whitespace-nowrap">다크</span>
+									<span class="whitespace-nowrap">{m.Dark()}</span>
 									{#if false}
 										<IconCheck size="13px" color="var(--color-primary)" />
 									{/if}
@@ -257,21 +258,21 @@
 				<article class="border-b border-border py-6">
 					<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
 						<IconDatabase size="16px" strokeWidth="2" />
-						데이터 설정
+						{m.DataSettings()}
 					</p>
 					<div class="flex flex-col gap-4">
 						<div class="flex items-center gap-3">
 							<div class="flex items-center flex-1 gap-2 text-text-secondary">
 								<IconTrash size="18px" />
-								<p class="truncate text-[14px]">데이터 초기화</p>
+								<p class="truncate text-[14px]">{m.DataReset()}</p>
 							</div>
 							<button
 								type="button"
 								class="shrink-0 text-red-500 flex items-center border border-red-500 rounded-full py-0.5 px-1.5"
-								title="초기화"
+								title={m.Reset()}
 								onclick={() => (isShowInitModal = true)}
 							>
-								<span class="text-[12px] font-bold">초기화</span>
+								<span class="text-[12px] font-bold">{m.Reset()}</span>
 							</button>
 						</div>
 					</div>
@@ -280,7 +281,7 @@
 			<article class="border-b border-border py-6">
 				<p class="text-primary font-bold text-[13px] flex items-center gap-1 mb-4">
 					<IconMonitorSmartphone size="16px" strokeWidth="2" />
-					앱 정보
+					{m.AppInfo()}
 				</p>
 				<div class="flex flex-col gap-4">
 					<div class="flex items-center gap-3">
@@ -291,10 +292,10 @@
 						<button
 							type="button"
 							class="shrink-0 text-text-secondary flex items-center gap-1"
-							title="이동하기"
+							title={m.GoTo()}
 							onclick={() => moveToUrlala('/')}
 						>
-							<span class="text-[13px]">이동하기</span>
+							<span class="text-[13px]">{m.GoTo()}</span>
 							<IconChevronRight size="13px" />
 						</button>
 					</div>
@@ -302,15 +303,15 @@
 						<div class="flex items-center gap-3">
 							<div class="flex items-center flex-1 gap-2 text-text-secondary">
 								<IconSmartPhone size="18px" />
-								<p class="truncate">앱 다운로드</p>
+								<p class="truncate">{m.AppInfo()}</p>
 							</div>
 							<button
 								type="button"
 								class="shrink-0 text-text-secondary flex items-center gap-1"
-								title="로그아웃"
+								title={m.Logout()}
 								onclick={login}
 							>
-								<span class="text-[13px]">이동하기</span>
+								<span class="text-[13px]">{m.GoTo()}</span>
 								<IconChevronRight size="13px" />
 							</button>
 						</div>
@@ -318,15 +319,15 @@
 					<div class="flex items-center gap-3">
 						<div class="flex items-center flex-1 gap-2 text-text-secondary">
 							<IconLibrary size="18px" />
-							<p class="truncate text-[14px]">이용가이드</p>
+							<p class="truncate text-[14px]">{m.UserGuide()}</p>
 						</div>
 						<button
 							type="button"
 							class="shrink-0 text-text-secondary flex items-center gap-1"
-							title="보러가기"
+							title={m.ViewGuide()}
 							onclick={() => moveToUrlala('/guides')}
 						>
-							<span class="text-[13px]">보러가기</span>
+							<span class="text-[13px]">{m.ViewGuide()}</span>
 							<IconChevronRight size="13px" />
 						</button>
 					</div>
@@ -335,8 +336,8 @@
 		</div>
 		<div class="mt-4">
 			<div class="flex items-center justify-center gap-2 text-[12px]">
-				<a href={`${URLALA_BASE_URL}/terms`}>개인정보처리</a>
-				<a href={`${URLALA_BASE_URL}/privacy`}>이용약관</a>
+				<a href={`${URLALA_BASE_URL}/terms`}>{m.Privacy()}</a>
+				<a href={`${URLALA_BASE_URL}/privacy`}>{m.TermsOfService()}</a>
 			</div>
 			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.0</p>
 		</div>

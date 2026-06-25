@@ -67,3 +67,7 @@ export interface CacheEntry {
 }
 
 export type AddLinkInput = Partial<Pick<Link, 'label' | 'memo' | 'thumbnail' | 'url'>>
+
+export type SafariContextMenuCreateProperties = Browser.contextMenus.CreateProperties & {
+	icons: Record<number, string>
+}

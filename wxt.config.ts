@@ -7,7 +7,26 @@ export default defineConfig({
 	srcDir: 'src',
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
-		permissions: ['contextMenus', 'tabs', 'storage']
+		default_locale: 'en',
+		permissions: ['contextMenus', 'tabs', 'storage'],
+		action: {
+			default_icon: {
+				16: 'icon/16.png',
+				32: 'icon/32.png',
+				48: 'icon/48.png',
+				96: 'icon/96.png',
+				128: 'icon/128.png'
+			}
+		},
+		browser_action: {
+			default_icon: {
+				16: 'icon/16.png',
+				32: 'icon/32.png',
+				48: 'icon/48.png',
+				96: 'icon/96.png',
+				128: 'icon/128.png'
+			}
+		}
 	},
 	vite: () => ({
 		plugins: [

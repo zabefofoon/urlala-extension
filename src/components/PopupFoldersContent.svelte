@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { URLALA_BASE_URL } from '@/const'
+	import { m } from '@/lib/paraglide/messages'
 	import { PREV_ITEM } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
@@ -59,7 +60,7 @@
 					onclick={refresh}
 				>
 					<IconRefresh size="12px" />
-					<span class="text-[11px] tracking-[-0.2px]">새로고침</span>
+					<span class="text-[11px] tracking-[-0.2px]">{m.Refresh()}</span>
 				</button>
 			</header>
 		{/if}
@@ -72,7 +73,7 @@
 					{/each}
 				</div>
 			{:else if !items.length}
-				<p class="py-6 text-center text-[12px] text-text-secondary">항목이 없습니다.</p>
+				<p class="py-6 text-center text-[12px] text-text-secondary">{m.NoItems()}</p>
 			{:else}
 				<div class="flex flex-col gap-1.5">
 					{#each items as item (item.id)}
@@ -91,21 +92,20 @@
 	>
 		{#if authStore.isLoggedIn}
 			<p class="text-[12px]">
-				파일 관리는 <button
+				{m.FileManagePrefix()}<button
 					type="button"
 					class="inline text-primary underline font-bold"
 					onclick={moveToUrlala}
 				>
 					Urlala
-				</button>
-				에서 해주세요.
+				</button>{m.FileManageSuffix()}
 			</p>
 			<button
 				type="button"
 				class="flex h-6.5 items-center gap-1 rounded-full bg-primary pl-2.5 pr-3 text-white shadow-sm transition hover:brightness-95"
 				onclick={moveToUrlala}
 			>
-				<span class="text-[12px] leading-none font-bold">이동</span>
+				<span class="text-[12px] leading-none font-bold">{m.Move()}</span>
 				<IconChevronRight size="12px" strokeWidth="3px" />
 			</button>
 		{:else}
@@ -115,9 +115,9 @@
 					onclick={() =>
 						browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })}
 				>
-					로그인 후
+					{m.LoginLinkText()}
 				</button>
-				더 많은 기능을 사용하세요.
+				{m.LoginMoreFeatures()}
 			</p>
 		{/if}
 	</footer>

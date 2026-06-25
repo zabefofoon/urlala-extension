@@ -2,7 +2,7 @@ import { authApi } from '@/api/auth.api'
 import { itemsApi } from '@/api/items.api'
 import { CACHE_KEY_PREFIX, LOCAL_LINK_LIMIT, LOCAL_LINKS_KEY } from '@/const'
 import type { SupabaseUser } from '@/models/Auth'
-import type { Folder, Link } from '@/models/Item'
+import type { Folder, Link, SafariContextMenuCreateProperties } from '@/models/Item'
 
 const SAVE_PAGE_MENU_ID = 'urlala-save-page'
 
@@ -87,11 +87,20 @@ const savePageToLocal = async (pageUrl: string, tab?: Browser.tabs.Tab) => {
 
 export default defineBackground(() => {
 	browser.contextMenus.removeAll().then(() => {
-		browser.contextMenus.create({
+		const savePageMenu: SafariContextMenuCreateProperties = {
 			id: SAVE_PAGE_MENU_ID,
-			title: 'Urlala에 현재 페이지 저장',
-			contexts: ['page']
-		})
+			title: browser.i18n.getMessage('savePage'),
+			contexts: ['page'],
+			icons: {
+				16: '/icon/16.png',
+				32: '/icon/32.png',
+				48: '/icon/48.png',
+				96: '/icon/96.png',
+				128: '/icon/128.png'
+			}
+		}
+
+		browser.contextMenus.create(savePageMenu)
 	})
 
 	browser.contextMenus.onClicked.addListener(async (info, tab) => {

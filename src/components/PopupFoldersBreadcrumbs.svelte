@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { m } from '@/lib/paraglide/messages'
 	import { foldersStore } from '@/stores/folders.svelte'
 	import { ChevronRight as IconChevronRight } from 'lucide-svelte'
 
-	// 전체 포함한 전체 경로: ['전체', ...foldersStore.path]
-	const allItems = $derived([{ id: 'root', label: '전체' }, ...foldersStore.path])
+	const allItems = $derived([{ id: 'root', label: m.All() }, ...foldersStore.path])
 	const visibleItems = $derived(allItems.slice(-3))
 	const isCollapsed = $derived(allItems.length > 3)
 </script>

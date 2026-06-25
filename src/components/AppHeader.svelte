@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { URLALA_BASE_URL } from '@/const'
+	import { m } from '@/lib/paraglide/messages'
 	import { cn } from '@/lib/utils/cn'
 	import { authStore } from '@/stores/auth.svelte'
 	import { Settings as IconSettings } from 'lucide-svelte'
@@ -42,7 +43,7 @@
 					class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[80%] rounded-full bg-primary/10"
 				></div>
 			{/if}
-			<span class="leading-[100%] text-[12px]">추가</span>
+			<span class="leading-[100%] text-[12px]">{m.Add()}</span>
 		</button>
 		<button
 			type="button"
@@ -54,7 +55,7 @@
 					class="absolute top-[calc(50%+1px)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[80%] rounded-full bg-primary/10"
 				></div>
 			{/if}
-			<span class="leading-[100%] text-[12px]">폴더</span>
+			<span class="leading-[100%] text-[12px]">{m.Folders()}</span>
 		</button>
 	</div>
 	<div class="flex items-center ml-auto overflow-hidden whitespace-nowrap">
@@ -64,7 +65,7 @@
 				class="flex items-center bg-primary text-white rounded-full px-2 py-1.5"
 				onclick={login}
 			>
-				<span class="text-[11px] leading-[100%]">로그인</span>
+				<span class="text-[11px] leading-[100%]">{m.Login()}</span>
 			</button>
 		{:else}
 			<button type="button" class="flex items-center w-full overflow-hidden">
@@ -76,8 +77,8 @@
 		<button
 			type="button"
 			class="text-text-secondary ml-1.5"
-			aria-label="옵션 페이지 열기"
-			title="옵션 페이지 열기"
+			aria-label={m.OpenOptionsPage()}
+			title={m.OpenOptionsPage()}
 			onclick={openOptionsPage}
 		>
 			<IconSettings size="16px" />

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { LOCAL_LINK_LIMIT, LOCAL_LINKS_KEY } from '@/const'
+	import { m } from '@/lib/paraglide/messages.js'
 	import type { AddLinkInput, Link } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
@@ -33,7 +34,7 @@
 					(link) => !link.deleted_at
 				)
 				if (savedLinks.length >= LOCAL_LINK_LIMIT)
-					return (errorMessage = '비로그인 상태에서는 30개까지만 저장됩니다.')
+					return (errorMessage = m.LimitWarning())
 				else await foldersStore.addLinkLocal(item)
 			} else await foldersStore.addLink(item)
 			closePopup()
@@ -53,12 +54,12 @@
 			<tbody>
 				<tr>
 					<td class="pr-2 text-[12px] font-medium text-text-secondary pb-2">
-						<span class="whitespace-nowrap">제목</span>
+						<span class="whitespace-nowrap">{m.TitleLabel()}</span>
 					</td>
 					<td class="w-full pb-2">
 						<input
 							bind:value={link.label}
-							placeholder="제목을 입력하세요"
+							placeholder={m.TitlePlaceholder()}
 							class="h-9 w-full rounded-md border border-border px-2 text-[13px] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
 						/>
 					</td>
@@ -77,12 +78,12 @@
 				</tr>
 				<tr>
 					<td class="w-[52px] pr-2 pt-2 align-top text-[12px] font-medium text-text-secondary">
-						메모
+						{m.Memo()}
 					</td>
 					<td class="w-full">
 						<textarea
 							bind:value={link.memo}
-							placeholder="메모를 입력하세요"
+							placeholder={m.MemoPlaceholder()}
 							class="block min-h-[72px] w-full resize-none rounded-md border border-border px-2 py-2 text-[13px] leading-[1.45] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
 						></textarea>
 					</td>
@@ -90,7 +91,7 @@
 			</tbody>
 		</table>
 		{#if errorMessage}
-			<p class="text-red-500 text-[11px] text-center mt-1">asd</p>
+			<p class="text-red-500 text-[11px] text-center mt-1">{errorMessage}</p>
 		{/if}
 	</section>
 
@@ -101,7 +102,7 @@
 			onclick={closePopup}
 		>
 			<IconX size="12px" strokeWidth="3px" />
-			<span class="text-[12px] leading-none">취소</span>
+			<span class="text-[12px] leading-none">{m.Cancel()}</span>
 		</button>
 		<button
 			type="button"
@@ -109,7 +110,7 @@
 			onclick={saveLink}
 		>
 			<IconCheck size="12px" strokeWidth="3px" />
-			<span class="text-[12px] leading-none font-bold">추가</span>
+			<span class="text-[12px] leading-none font-bold">{m.Add()}</span>
 		</button>
 	</section>
 </div>
