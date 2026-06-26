@@ -3,6 +3,7 @@
 	import UIDropdown from '@/components/UIDropdown.svelte'
 	import { URLALA_BASE_URL } from '@/const'
 	import { m } from '@/lib/paraglide/messages'
+	import { getLocale, localizeHref } from '@/lib/paraglide/runtime'
 	import { authStore } from '@/stores/auth.svelte'
 	import {
 		AppWindow as IconAppWindow,
@@ -35,15 +36,15 @@
 		const accessToken = await authStore.getValidAccessToken()
 
 		const url = accessToken
-			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken)}&next=${next}`
-			: `${URLALA_BASE_URL}?next=${next}`
+			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken)}&next=${next}&locale=${getLocale()}`
+			: localizeHref(`${URLALA_BASE_URL}${next}`)
 
 		browser.tabs.create({ url })
 		window.close()
 	}
 
 	const login = () => {
-		browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })
+		browser.tabs.create({ url: localizeHref(`${URLALA_BASE_URL}/external/login?from=extension`) })
 	}
 
 	onMount(() => {
@@ -349,8 +350,8 @@
 		</div>
 		<div class="mt-4">
 			<div class="flex items-center justify-center gap-2 text-[12px]">
-				<a href={`${URLALA_BASE_URL}/terms`}>{m.Privacy()}</a>
-				<a href={`${URLALA_BASE_URL}/privacy`}>{m.TermsOfService()}</a>
+				<a href={localizeHref(`${URLALA_BASE_URL}/terms`)}>{m.Privacy()}</a>
+				<a href={localizeHref(`${URLALA_BASE_URL}/privacy`)}>{m.TermsOfService()}</a>
 			</div>
 			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.0</p>
 		</div>

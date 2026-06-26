@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { URLALA_BASE_URL } from '@/const'
 	import { m } from '@/lib/paraglide/messages'
+	import { localizeHref } from '@/lib/paraglide/runtime'
 	import { cn } from '@/lib/utils/cn'
 	import { authStore } from '@/stores/auth.svelte'
 	import { Settings as IconSettings } from 'lucide-svelte'
@@ -21,7 +22,9 @@
 	}
 
 	const login = async () => {
-		await browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })
+		await browser.tabs.create({
+			url: localizeHref(`${URLALA_BASE_URL}/external/login?from=extension`)
+		})
 	}
 </script>
 
@@ -70,7 +73,7 @@
 		{:else}
 			<button type="button" class="flex items-center w-full overflow-hidden">
 				<span class="text-[11px] leading-[100%] tracking-[-0.2px] truncate">
-					{authStore.user?.email.split('@')[0]}
+					{authStore.user?.email?.split('@')[0]}
 				</span>
 			</button>
 		{/if}

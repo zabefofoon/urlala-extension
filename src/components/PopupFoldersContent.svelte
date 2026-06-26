@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { URLALA_BASE_URL } from '@/const'
 	import { m } from '@/lib/paraglide/messages'
+	import { getLocale, localizeHref } from '@/lib/paraglide/runtime'
 	import { PREV_ITEM } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
@@ -14,8 +15,8 @@
 		const accessToken = await authStore.getValidAccessToken()
 
 		const url = accessToken
-			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken)}`
-			: `${URLALA_BASE_URL}/folder/root`
+			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken)}&locale=${getLocale()}`
+			: localizeHref(`${URLALA_BASE_URL}/folder/root`)
 
 		browser.tabs.create({ url })
 		window.close()
@@ -113,7 +114,9 @@
 				<button
 					class="text-primary underline"
 					onclick={() =>
-						browser.tabs.create({ url: `${URLALA_BASE_URL}/external/login?from=extension` })}
+						browser.tabs.create({
+							url: localizeHref(`${URLALA_BASE_URL}/external/login?from=extension`)
+						})}
 				>
 					{m.LoginLinkText()}
 				</button>
