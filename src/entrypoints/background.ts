@@ -1,8 +1,8 @@
 import { authApi } from '@/api/auth.api'
 import { itemsApi } from '@/api/items.api'
 import { CACHE_KEY_PREFIX, LOCAL_LINK_LIMIT, LOCAL_LINKS_KEY } from '@/const'
-import type { SupabaseUser } from '@/models/Auth'
 import type { Folder, Link } from '@/models/Item'
+import type { User } from '@supabase/supabase-js'
 
 const SAVE_PAGE_MENU_ID = 'urlala-save-page'
 
@@ -55,7 +55,7 @@ const createLinkFromPage = (input: {
 
 const savePageToRemote = async (pageUrl: string, tab?: Browser.tabs.Tab) => {
 	const { user: cachedUser } = await browser.storage.local.get('user')
-	const user = (cachedUser as SupabaseUser | undefined) ?? (await authApi.getUser()).data
+	const user = (cachedUser as User | undefined) ?? (await authApi.getUser()).data
 	const userId = user?.id
 	if (!userId) return false
 
@@ -119,11 +119,9 @@ const notifySaveSuccess = async (tab?: Browser.tabs.Tab, folderName?: string): P
 		? browser.i18n.getMessage('saveSuccessInFolder', [folderName])
 		: browser.i18n.getMessage('saveSuccess')
 
-	await browser.tabs
-		.sendMessage(tab.id, { type: 'SAVE_SUCCESS', text })
-		.catch((error: unknown) => {
-			console.warn('Failed to notify save success:', { error })
-		})
+	await browser.tabs.sendMessage(tab.id, { type: 'SAVE_SUCCESS', text }).catch((error: unknown) => {
+		console.warn('Failed to notify save success:', { error })
+	})
 }
 
 export default defineBackground(() => {
@@ -142,8 +140,12 @@ export default defineBackground(() => {
 					? await savePageToRemote(pageUrl, tab)
 					: await savePageToLocal(pageUrl, tab)
 				if (isSaved) {
-					const stored = (await browser.storage.local.get('folders_path')) as { folders_path?: Folder[] }
-					const currentFolder = stored.folders_path ? Array.from(stored.folders_path).at(-1) : undefined
+					const stored = (await browser.storage.local.get('folders_path')) as {
+						folders_path?: Folder[]
+					}
+					const currentFolder = stored.folders_path
+						? Array.from(stored.folders_path).at(-1)
+						: undefined
 					const folderName = accessToken && currentFolder ? currentFolder.label : undefined
 					await notifySaveSuccess(tab, folderName)
 				}

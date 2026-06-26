@@ -1,17 +1,24 @@
 import { authApi } from '@/api/auth.api'
-import type { SupabaseUser } from '@/models/Auth'
+import type { User } from '@supabase/supabase-js'
 import dayjs from 'dayjs'
 import { foldersStore } from './folders.svelte'
-
 class AuthStore {
 	accessToken = $state<string | undefined>()
 	refreshToken = $state<string | undefined>()
-	user = $state<SupabaseUser | undefined>()
+	user = $state<User | undefined>()
 	isLoaded = $state(false)
 
 	get isLoggedIn() {
 		return !!this.user?.id
 	}
+
+	profileImage = $derived.by(() => {
+		return (
+			this.user?.user_metadata.custom_avatar_url ??
+			this.user?.user_metadata.avatar_url ??
+			this.user?.user_metadata.picture
+		)
+	})
 
 	load = async () => {
 		const result = await browser.storage.local.get(['accessToken', 'refreshToken'])
@@ -31,7 +38,7 @@ class AuthStore {
 		const expiresAt = cached.userExpiresAt as string | undefined
 
 		if (expiresAt && dayjs().isBefore(dayjs(expiresAt)) && cached.user)
-			this.user = cached.user as SupabaseUser
+			this.user = cached.user as User
 		else {
 			// 캐시 만료 — API 호출 후 저장
 			try {

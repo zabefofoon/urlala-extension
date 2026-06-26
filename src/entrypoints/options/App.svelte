@@ -78,7 +78,7 @@
 						{#if authStore.user}
 							<div class="flex items-center flex-1 gap-2">
 								<img
-									src={authStore.user.user_metadata.avatar_url}
+									src={authStore.profileImage}
 									alt={m.Profile()}
 									class="h-9 w-9 rounded-full object-cover"
 								/>
