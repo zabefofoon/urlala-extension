@@ -8,6 +8,7 @@
 		ChevronRight as IconChevronRight,
 		Folder as IconFolder,
 		Link as IconLink,
+		PackageOpen as IconPackageOpen,
 		X as IconX
 	} from 'lucide-svelte'
 
@@ -16,6 +17,8 @@
 	}
 
 	const props: Props = $props()
+
+	let isOpeningFolder = $state(false)
 
 	const folderColor = $derived(
 		props.item.type === 'folder'
@@ -28,26 +31,53 @@
 			? `border-folder-border-${props.item.color ?? DEFAULT_FOLDER_COLOR} dark:border-folder-${props.item.color ?? DEFAULT_FOLDER_COLOR}`
 			: undefined
 	})
+
+	const openFolder = async () => {
+		if (props.item.type !== 'folder' || props.item.id === 'prev' || isOpeningFolder) return
+
+		isOpeningFolder = true
+		try {
+			const urls = await foldersStore.getChildLinks(props.item.id)
+			if (!urls?.length) return
+
+			await Promise.all(urls.map((url) => browser.tabs.create({ url, active: false })))
+			window.close()
+		} finally {
+			isOpeningFolder = false
+		}
+	}
 </script>
 
 <div class="transition-opacity">
 	{#if props.item.type === 'folder'}
-		<button
-			type="button"
-			class={cn([
-				'flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-left transition-all hover:brightness-95 ',
-				{
-					[`${folderColor} ${borderColor} border dark:bg-transparent`]:
-						props.item.type === 'folder',
-					'bg-surface-elevated': props.item.id === 'prev'
-				}
-			])}
-			onclick={() => foldersStore.enterFolder(props.item as Folder)}
-		>
-			<IconFolder size="14px" class="shrink-0 text-text-secondary" />
-			<span class="flex-1 truncate text-[12px] leading-none">{props.item.label}</span>
-			<IconChevronRight size="13px" class="shrink-0 text-text-secondary" />
-		</button>
+		<div class="flex items-center gap-1.5">
+			<button
+				type="button"
+				class={cn([
+					'flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-left transition-all hover:brightness-95 ',
+					{
+						[`${folderColor} ${borderColor} border dark:bg-transparent`]:
+							props.item.type === 'folder',
+						'bg-surface-elevated': props.item.id === 'prev'
+					}
+				])}
+				onclick={() => foldersStore.enterFolder(props.item as Folder)}
+			>
+				<IconFolder size="14px" class="shrink-0 text-text-secondary" />
+				<span class="flex-1 truncate text-[12px] leading-none">{props.item.label}</span>
+				<IconChevronRight size="13px" class="shrink-0 text-text-secondary" />
+			</button>
+			{#if props.item.id !== 'prev'}
+				<button
+					type="button"
+					class="border border-border rounded-md p-1"
+					disabled={isOpeningFolder}
+					onclick={openFolder}
+				>
+					<IconPackageOpen size="13px" class="shrink-0 text-text-secondary" />
+				</button>
+			{/if}
+		</div>
 	{:else}
 		<a
 			class="flex items-center gap-1.5 rounded-md border border-border px-2 py-1.5"

@@ -246,6 +246,12 @@ class FoldersStore {
 
 		return true
 	}
+
+	async getChildLinks(folderId: string) {
+		if (!authStore.user?.id) return
+		const res = await itemsApi.getAllLinks(folderId, authStore.user?.id)
+		return res.map((link) => link.url)
+	}
 }
 
 export const foldersStore = new FoldersStore()

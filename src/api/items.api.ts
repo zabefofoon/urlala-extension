@@ -1,4 +1,4 @@
-import type { Item, ItemCursor, PageResponse } from '@/models/Item'
+import type { Item, ItemCursor, Link, PageResponse } from '@/models/Item'
 import { apiClient } from './apiClient'
 
 const PAGE_SIZE = 20
@@ -63,5 +63,19 @@ export const itemsApi = {
 			items.map((item) => ({ ...item, user_id: userId, updated_at: new Date().toISOString() })),
 			{ headers: { Prefer: 'resolution=merge-duplicates' } }
 		)
+	},
+
+	async getAllLinks(folderId: string, userId: string): Promise<Link[]> {
+		const res = await apiClient.get<Link[]>('/rest/v1/url_items', {
+			params: {
+				user_id: `eq.${userId}`,
+				parent_id: `eq.${folderId}`,
+				type: 'eq.link',
+				deleted_at: 'is.null',
+				order: 'sort_order.asc,id.asc'
+			}
+		})
+
+		return res.data
 	}
 }
