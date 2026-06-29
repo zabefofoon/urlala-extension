@@ -6,6 +6,12 @@
 	import AppHeader from '../../components/AppHeader.svelte'
 
 	let selectedMenu = $state<'add' | 'folders'>('add')
+	let isFolderSelectMode = $state(false)
+
+	const setFolderSelectMode = (value: boolean) => {
+		isFolderSelectMode = value
+	}
+
 	const selectMenu = async (value: 'add' | 'folders') => {
 		selectedMenu = value
 		await browser.storage.local.set({ selectedMenu: value })
@@ -33,12 +39,12 @@
 </script>
 
 <main class="w-[320px] aspect-square bg-surface rounded-2xl flex flex-col overscroll-none">
-	<AppHeader {selectedMenu} {selectMenu} />
+	<AppHeader {selectedMenu} {selectMenu} {setFolderSelectMode} />
 	<div class="flex flex-col flex-1 overflow-hidden">
 		{#if selectedMenu === 'add'}
-			<PopupAddContent />
+			<PopupAddContent {selectMenu} {setFolderSelectMode} />
 		{:else}
-			<PopupFoldersContent />
+			<PopupFoldersContent {isFolderSelectMode} {selectMenu} {setFolderSelectMode} />
 		{/if}
 	</div>
 </main>

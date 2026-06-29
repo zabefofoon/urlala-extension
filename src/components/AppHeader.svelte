@@ -9,6 +9,7 @@
 	interface Props {
 		selectedMenu: 'add' | 'folders'
 		selectMenu: (menu: 'add' | 'folders') => void
+		setFolderSelectMode: (value: boolean) => void
 	}
 
 	const props: Props = $props()
@@ -39,7 +40,10 @@
 		<button
 			type="button"
 			class={cn(['relative py-1', { 'text-primary font-bold': props.selectedMenu === 'add' }])}
-			onclick={() => props.selectMenu('add')}
+			onclick={() => {
+				props.setFolderSelectMode(false)
+				props.selectMenu('add')
+			}}
 		>
 			{#if props.selectedMenu === 'add'}
 				<div
@@ -51,7 +55,10 @@
 		<button
 			type="button"
 			class={cn(['relative py-1', { 'text-primary font-bold': props.selectedMenu === 'folders' }])}
-			onclick={() => props.selectMenu('folders')}
+			onclick={() => {
+				props.setFolderSelectMode(false)
+				props.selectMenu('folders')
+			}}
 		>
 			{#if props.selectedMenu === 'folders'}
 				<div

@@ -2,23 +2,37 @@
 	import { URLALA_BASE_URL } from '@/const'
 	import { m } from '@/lib/paraglide/messages'
 	import { getLocale, localizeHref } from '@/lib/paraglide/runtime'
-	import { PREV_ITEM } from '@/models/Item'
+	import etc from '@/lib/utils/etc'
+	import { type Folder, PREV_ITEM } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
-	import { ChevronRight as IconChevronRight, RefreshCw as IconRefresh } from 'lucide-svelte'
+	import {
+		Check as IconCheck,
+		ChevronRight as IconChevronRight,
+		RefreshCw as IconRefresh,
+		X as IconX
+	} from 'lucide-svelte'
 	import FileItem from './FileItem.svelte'
 	import PopupFoldersBreadcrumbs from './PopupFoldersBreadcrumbs.svelte'
+
+	interface Props {
+		isFolderSelectMode?: boolean
+		selectMenu: (value: 'add' | 'folders') => Promise<void>
+		setFolderSelectMode: (value: boolean) => void
+	}
+
+	const props: Props = $props()
 
 	let loadMoreEl = $state<HTMLElement>()
 
 	const moveToUrlala = async () => {
 		const accessToken = await authStore.getValidAccessToken()
 		if (!accessToken) browser.tabs.create({ url: localizeHref(`${URLALA_BASE_URL}/folder/root`) })
-		else if (foldersStore.currentFolder) {
+		else {
 			let next = `/folder/root`
-			if (foldersStore.currentFolder.id !== 'root') {
-				const res = await foldersStore.getParents(foldersStore.currentFolder.id)
-				next = `/folder/${res?.map(({ id }) => id).join('/')}/${foldersStore.currentFolder.id}`
+			if (foldersStore.currentFolderId !== 'root') {
+				const res = await foldersStore.getParents(foldersStore.currentFolderId)
+				next = `/folder/${res?.map(({ id }) => id).join('/')}/${foldersStore.currentFolderId}`
 			}
 			browser.tabs.create({
 				url: `${URLALA_BASE_URL}/external/login/token?accessToken=${accessToken}&locale=${getLocale()}&next=${next}`
@@ -35,9 +49,39 @@
 	const items = $derived.by(() => {
 		if (!authStore.isLoggedIn) return foldersStore.localLinks ?? []
 		else {
-			const items = foldersStore.pageResponse?.items ?? []
-			return foldersStore.path.length ? [PREV_ITEM, ...items] : items
+			const raw =
+				(foldersStore.currentFolder?.id ?? 'root') !== 'root'
+					? [PREV_ITEM, ...(foldersStore.pageResponse?.items ?? [])]
+					: foldersStore.pageResponse?.items
+
+			if (!raw) return raw
+
+			const folders = raw
+				.filter((item) => item.type === 'folder')
+				.sort((a, b) => a.label.localeCompare(b.label))
+			const links = raw
+				.filter((item) => item.type === 'link')
+				.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+
+			return [...folders, ...links]
 		}
+	})
+
+	let originalPath: Folder[] = []
+
+	const cancelFolderSelect = () => {
+		foldersStore.path = originalPath
+		props.setFolderSelectMode(false)
+		props.selectMenu('add')
+	}
+
+	let isOnce = false
+	$effect(() => {
+		if (!foldersStore.currentFolder) return
+		if (isOnce) return
+		isOnce = true
+
+		originalPath = etc.deepclone($state.snapshot(foldersStore.path))
 	})
 
 	$effect(() => {
@@ -57,7 +101,7 @@
 
 <div class="flex flex-1 flex-col overflow-hidden">
 	<div class="flex-1 flex flex-col overflow-auto">
-		{#if items.length && authStore.isLoggedIn}
+		{#if items?.length && authStore.isLoggedIn}
 			<header class="flex items-center px-3 pt-2 shrink-0">
 				<PopupFoldersBreadcrumbs />
 				<button
@@ -78,7 +122,7 @@
 						<div class="h-8 animate-pulse rounded-md bg-surface-elevated"></div>
 					{/each}
 				</div>
-			{:else if !items.length}
+			{:else if !items?.length}
 				<p class="py-6 text-center text-[12px] text-text-secondary">{m.NoItems()}</p>
 			{:else}
 				<div class="flex flex-col gap-1.5">
@@ -94,9 +138,29 @@
 	</div>
 
 	<footer
-		class="shrink-0 bg-surface px-3 py-2 flex items-center justify-between border-t border-border"
+		class="gap-1 shrink-0 bg-surface px-3 py-2 flex items-center justify-between border-t border-border"
 	>
-		{#if authStore.isLoggedIn}
+		{#if props.isFolderSelectMode}
+			<button
+				type="button"
+				class="ml-auto flex h-6.5 items-center gap-1 rounded-full px-3 text-text-secondary transition hover:bg-surface-elevated"
+				onclick={cancelFolderSelect}
+			>
+				<IconX size="12px" strokeWidth="3px" />
+				<span class="text-[12px] leading-none">{m.Cancel()}</span>
+			</button>
+			<button
+				type="button"
+				class="flex h-6.5 items-center gap-1 rounded-full bg-primary pl-2.5 pr-3 text-white shadow-sm transition hover:brightness-95"
+				onclick={() => {
+					props.setFolderSelectMode(false)
+					props.selectMenu('add')
+				}}
+			>
+				<IconCheck size="12px" strokeWidth="3px" />
+				<span class="text-[12px] leading-none font-bold">{m.Select()}</span>
+			</button>
+		{:else if authStore.isLoggedIn}
 			<p class="text-[12px]">
 				{m.FileManagePrefix()}<button
 					type="button"

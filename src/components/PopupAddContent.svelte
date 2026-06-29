@@ -7,6 +7,13 @@
 	import { Check as IconCheck, X as IconX } from 'lucide-svelte'
 	import { onMount } from 'svelte'
 
+	interface Props {
+		selectMenu: (value: 'add' | 'folders') => Promise<void>
+		setFolderSelectMode: (value: boolean) => void
+	}
+
+	const props: Props = $props()
+
 	const notifySaveSuccess = async () => {
 		const currentFolder = authStore.isLoggedIn ? foldersStore.currentFolder : undefined
 		const text = currentFolder
@@ -47,8 +54,7 @@
 				const savedLinks = ((stored[LOCAL_LINKS_KEY] as Link[] | undefined) ?? []).filter(
 					(link) => !link.deleted_at
 				)
-				if (savedLinks.length >= LOCAL_LINK_LIMIT)
-					return (errorMessage = m.LimitWarning())
+				if (savedLinks.length >= LOCAL_LINK_LIMIT) return (errorMessage = m.LimitWarning())
 				else await foldersStore.addLinkLocal(item)
 			} else await foldersStore.addLink(item)
 			notifySaveSuccess()
@@ -67,6 +73,26 @@
 	<section class="min-h-0 flex-1 px-3 py-3">
 		<table class="w-full border-separate border-spacing-y-0">
 			<tbody>
+				{#if authStore.isLoggedIn && (foldersStore.currentFolder?.label ?? m.All())}
+					<tr>
+						<td class="pr-2 text-[12px] font-medium text-text-secondary pb-2">
+							<span class="whitespace-nowrap">{m.Folders()}</span>
+						</td>
+						<td class="w-full pb-2">
+							<button
+								placeholder={m.TitlePlaceholder()}
+								class="w-full px-2 text-[13px] text-primary underline text-left"
+								onclick={() => {
+									props.setFolderSelectMode(true)
+									props.selectMenu('folders')
+								}}
+							>
+								{foldersStore.currentFolder?.label ?? m.All()}
+							</button>
+						</td>
+					</tr>
+				{/if}
+
 				<tr>
 					<td class="pr-2 text-[12px] font-medium text-text-secondary pb-2">
 						<span class="whitespace-nowrap">{m.TitleLabel()}</span>
@@ -75,7 +101,7 @@
 						<input
 							bind:value={link.label}
 							placeholder={m.TitlePlaceholder()}
-							class="h-9 w-full rounded-md border border-border px-2 text-[13px] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
+							class="h-9 w-full rounded-md border border-border px-2 text-[13px] outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
 						/>
 					</td>
 				</tr>
@@ -87,7 +113,7 @@
 						<textarea
 							bind:value={link.url}
 							placeholder="https://example.com"
-							class="block min-h-[72px] w-full resize-none rounded-md border border-border px-2 py-2 text-[13px] leading-[1.45] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
+							class="block min-h-[64px] w-full resize-none rounded-md border border-border px-2 py-2 text-[13px] leading-[1.45] outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
 						></textarea>
 					</td>
 				</tr>
@@ -99,7 +125,7 @@
 						<textarea
 							bind:value={link.memo}
 							placeholder={m.MemoPlaceholder()}
-							class="block min-h-[72px] w-full resize-none rounded-md border border-border px-2 py-2 text-[13px] leading-[1.45] text-text-primary outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
+							class="block min-h-[64px] w-full resize-none rounded-md border border-border px-2 py-2 text-[13px] leading-[1.45] outline-none transition placeholder:text-text-secondary/60 focus:border-primary focus:bg-surface focus:ring-2 focus:ring-primary/15"
 						></textarea>
 					</td>
 				</tr>
@@ -110,7 +136,7 @@
 		{/if}
 	</section>
 
-	<section class="mt-auto flex items-center gap-1.5 border-t border-border px-3 py-2">
+	<section class="mt-auto flex items-center gap-1 border-t border-border px-3 py-2">
 		<button
 			type="button"
 			class="ml-auto flex h-6.5 items-center gap-1 rounded-full px-3 text-text-secondary transition hover:bg-surface-elevated"
