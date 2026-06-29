@@ -8,6 +8,7 @@
 		ChevronRight as IconChevronRight,
 		Folder as IconFolder,
 		Link as IconLink,
+		Lock as IconLock,
 		PackageOpen as IconPackageOpen,
 		X as IconX
 	} from 'lucide-svelte'
@@ -54,7 +55,7 @@
 			<button
 				type="button"
 				class={cn([
-					'flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-left transition-all hover:brightness-95 ',
+					'overflow-hidden flex w-full items-center gap-1.5 rounded-md px-2 py-1.5 text-left transition-all hover:brightness-95 ',
 					{
 						[`${folderColor} ${borderColor} border dark:bg-transparent`]:
 							props.item.type === 'folder',
@@ -64,7 +65,14 @@
 				onclick={() => foldersStore.enterFolder(props.item as Folder)}
 			>
 				<IconFolder size="14px" class="shrink-0 text-text-secondary" />
-				<span class="flex-1 truncate text-[12px] leading-none">{props.item.label}</span>
+				<div class="flex-1 flex items-center gap-1 overflow-hidden">
+					<p class="truncate text-[12px] leading-none">
+						{props.item.label}
+					</p>
+					{#if props.item.locked}
+						<IconLock size="10px" class="shrink-0 text-text-secondary" />
+					{/if}
+				</div>
 				<IconChevronRight size="13px" class="shrink-0 text-text-secondary" />
 			</button>
 			{#if props.item.id !== 'prev'}
@@ -84,7 +92,15 @@
 			href={props.item.url}
 			target="_blank"
 			rel="noopener noreferrer"
-			onclick={(e) => e.stopPropagation()}
+			onclick={(e) => {
+				e.stopPropagation()
+				if (
+					props.item.type === 'link' &&
+					props.item.collectable &&
+					!foldersStore.currentFolder?.locked
+				)
+					foldersStore.collectPopular(props.item)
+			}}
 		>
 			{#if props.item.thumbnail}
 				<img

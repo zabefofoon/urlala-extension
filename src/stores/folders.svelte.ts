@@ -1,3 +1,4 @@
+import { collectApi } from '@/api/collect.api'
 import { itemsApi } from '@/api/items.api'
 import { CACHE_KEY_PREFIX, CACHE_TTL_MINUTES, LOCAL_LINKS_KEY, LOCAL_LINK_LIMIT } from '@/const'
 import type { AddLinkInput, CacheEntry, Folder, Link, PageResponse } from '@/models/Item'
@@ -250,6 +251,10 @@ class FoldersStore {
 		if (!authStore.user?.id) return
 		const res = await itemsApi.getParents(folderId, authStore.user.id)
 		return res
+	}
+
+	async collectPopular(link: Link) {
+		collectApi.save(link)
 	}
 }
 
