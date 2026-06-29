@@ -77,5 +77,41 @@ export const itemsApi = {
 		})
 
 		return res.data
+	},
+
+	async find(id: string, userId: string): Promise<Item | undefined> {
+		const res = await apiClient.get<Item[]>('/rest/v1/url_items', {
+			params: { id: `eq.${id}`, user_id: `eq.${userId}`, limit: 1 }
+		})
+		return res.data[0]
+	},
+
+	async getParents(folderId: string, userId: string): Promise<Item[]> {
+		try {
+			const res = await apiClient.post<Item[]>('/rest/v1/rpc/get_url_item_parents', {
+				target_id: folderId,
+				target_parent_id: null,
+				target_user_id: userId
+			})
+			return res.data ?? []
+		} catch (error: unknown) {
+			const code = (error as { response?: { data?: { code?: string } } })?.response?.data?.code
+			if (code !== 'PGRST202') throw error
+		}
+
+		// RPC 함수가 없으면 직접 트리를 걸어 올라감
+		const parents: Item[] = []
+		const visited = new Set<string>([folderId])
+		let current = await this.find(folderId, userId)
+
+		while (current?.parent_id && !visited.has(current.parent_id)) {
+			visited.add(current.parent_id)
+			const parent = await this.find(current.parent_id, userId)
+			if (!parent || parent.type !== 'folder') break
+			parents.unshift(parent)
+			current = parent
+		}
+
+		return parents
 	}
 }

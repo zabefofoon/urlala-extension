@@ -13,12 +13,18 @@
 
 	const moveToUrlala = async () => {
 		const accessToken = await authStore.getValidAccessToken()
+		if (!accessToken) browser.tabs.create({ url: localizeHref(`${URLALA_BASE_URL}/folder/root`) })
+		else if (foldersStore.currentFolder) {
+			let next = `/folder/root`
+			if (foldersStore.currentFolder.id !== 'root') {
+				const res = await foldersStore.getParents(foldersStore.currentFolder.id)
+				next = `/folder/${res?.map(({ id }) => id).join('/')}/${foldersStore.currentFolder.id}`
+			}
+			browser.tabs.create({
+				url: `${URLALA_BASE_URL}/external/login/token?accessToken=${accessToken}&locale=${getLocale()}&next=${next}`
+			})
+		}
 
-		const url = accessToken
-			? `${URLALA_BASE_URL}/external/login/token?accessToken=${encodeURIComponent(accessToken)}&locale=${getLocale()}`
-			: localizeHref(`${URLALA_BASE_URL}/folder/root`)
-
-		browser.tabs.create({ url })
 		window.close()
 	}
 

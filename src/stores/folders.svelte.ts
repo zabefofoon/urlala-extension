@@ -249,8 +249,14 @@ class FoldersStore {
 
 	async getChildLinks(folderId: string) {
 		if (!authStore.user?.id) return
-		const res = await itemsApi.getAllLinks(folderId, authStore.user?.id)
+		const res = await itemsApi.getAllLinks(folderId, authStore.user.id)
 		return res.map((link) => link.url)
+	}
+
+	async getParents(folderId: string) {
+		if (!authStore.user?.id) return
+		const res = await itemsApi.getParents(folderId, authStore.user.id)
+		return res
 	}
 }
 
