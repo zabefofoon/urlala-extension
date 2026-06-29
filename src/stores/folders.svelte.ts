@@ -44,13 +44,6 @@ class FoldersStore {
 		await browser.storage.local.set({ [key]: entry })
 	}
 
-	private async clearCache() {
-		const stored = await browser.storage.local.get()
-		const cacheKeys = Object.keys(stored).filter((key) => key.startsWith(CACHE_KEY_PREFIX))
-
-		if (cacheKeys.length) await browser.storage.local.remove(cacheKeys)
-	}
-
 	private savePath() {
 		this.isPathInitialized = true
 		browser.storage.local.set({ folders_path: $state.snapshot(this.path) })
@@ -84,7 +77,7 @@ class FoldersStore {
 		if (!force) {
 			const cached = await this.readCache(userId, this.currentFolderId)
 			if (cached) return (this.pageResponse = cached)
-		} else await this.clearCache()
+		} else await browser.storage.local.remove(this.cacheKey(userId, this.currentFolderId))
 
 		this.isLoading = true
 		try {

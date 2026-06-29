@@ -29,7 +29,6 @@
 	}
 
 	const refresh = () => {
-		foldersStore.goRoot()
 		if (authStore.isLoggedIn) foldersStore.load(true)
 	}
 
