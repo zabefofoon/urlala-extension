@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PopupAddContent from '@/components/PopupAddContent.svelte'
 	import PopupFoldersContent from '@/components/PopupFoldersContent.svelte'
+	import UISpinner from '@/components/UISpinner.svelte'
 	import { authStore } from '@/stores/auth.svelte'
 	import { onMount } from 'svelte'
 	import AppHeader from '../../components/AppHeader.svelte'
@@ -41,7 +42,11 @@
 <main class="w-[320px] aspect-square bg-surface rounded-2xl flex flex-col overscroll-none">
 	<AppHeader {selectedMenu} {selectMenu} {setFolderSelectMode} />
 	<div class="flex flex-col flex-1 overflow-hidden">
-		{#if selectedMenu === 'add'}
+		{#if authStore.isLoading}
+			<div class="w-full h-full grid place-items-center mb-[36px]">
+				<UISpinner />
+			</div>
+		{:else if selectedMenu === 'add'}
 			<PopupAddContent {selectMenu} {setFolderSelectMode} />
 		{:else}
 			<PopupFoldersContent {isFolderSelectMode} {selectMenu} {setFolderSelectMode} />

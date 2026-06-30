@@ -6,7 +6,7 @@ class AuthStore {
 	accessToken = $state<string | undefined>()
 	refreshToken = $state<string | undefined>()
 	user = $state<User | undefined>()
-	isLoaded = $state(false)
+	isLoading = $state(false)
 
 	get isLoggedIn() {
 		return !!this.user?.id
@@ -24,12 +24,14 @@ class AuthStore {
 		const result = await browser.storage.local.get(['accessToken', 'refreshToken'])
 		this.accessToken = result.accessToken as string
 		this.refreshToken = result.refreshToken as string
-		this.isLoaded = true
+		this.isLoading = true
 
 		if (this.accessToken) {
 			await this.loadUser()
 			await foldersStore.migrate()
 		}
+
+		this.isLoading = false
 	}
 
 	loadUser = async () => {
