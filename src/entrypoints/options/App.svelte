@@ -350,8 +350,8 @@
 		</div>
 		<div class="mt-4">
 			<div class="flex items-center justify-center gap-2 text-[12px]">
-				<a href={localizeHref(`${URLALA_BASE_URL}/terms`)}>{m.Privacy()}</a>
-				<a href={localizeHref(`${URLALA_BASE_URL}/privacy`)}>{m.TermsOfService()}</a>
+				<a href={localizeHref(`${URLALA_BASE_URL}/privacy`)}>{m.Privacy()}</a>
+				<a href={localizeHref(`${URLALA_BASE_URL}/terms`)}>{m.TermsOfService()}</a>
 			</div>
 			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.0</p>
 		</div>
