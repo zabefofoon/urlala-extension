@@ -2,7 +2,7 @@
 	"name": "Urlala",
 	"description": "Save and organize your favorite websites with Smart Bookmark Manager. Quickly add bookmarks, manage URLs, keep important links in folders, and access your favorite pages whenever you need them.",
 	"private": true,
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"type": "module",
 	"scripts": {
 		"dev": "wxt",

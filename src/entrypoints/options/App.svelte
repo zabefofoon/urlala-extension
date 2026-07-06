@@ -353,7 +353,7 @@
 				<a href={localizeHref(`${URLALA_BASE_URL}/privacy`)}>{m.Privacy()}</a>
 				<a href={localizeHref(`${URLALA_BASE_URL}/terms`)}>{m.TermsOfService()}</a>
 			</div>
-			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.0</p>
+			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.1</p>
 		</div>
 	</section>
 </main>
