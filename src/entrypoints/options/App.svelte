@@ -292,7 +292,7 @@
 							type="button"
 							class="shrink-0 text-text-secondary flex items-center gap-1"
 							title={m.GoTo()}
-							onclick={() => moveToUrlala('/')}
+							onclick={() => moveToUrlala('/app')}
 						>
 							<span class="text-[13px]">{m.GoTo()}</span>
 							<IconChevronRight size="13px" />
