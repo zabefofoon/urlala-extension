@@ -50,7 +50,7 @@ class FoldersStore {
 		browser.storage.local.set({ folders_path: $state.snapshot(this.path) })
 	}
 
-	private async initializePath() {
+	async initializePath() {
 		if (this.isPathInitialized) return
 
 		const stored = (await browser.storage.local.get('folders_path')) as { folders_path: Folder[] }

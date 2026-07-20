@@ -66,6 +66,7 @@
 
 	onMount(() => {
 		loadLink()
+		if (authStore.isLoggedIn) foldersStore.initializePath()
 	})
 </script>
 
