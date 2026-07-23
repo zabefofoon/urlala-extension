@@ -3,12 +3,13 @@
 	import { m } from '@/lib/paraglide/messages'
 	import { getLocale, localizeHref } from '@/lib/paraglide/runtime'
 	import etc from '@/lib/utils/etc'
-	import { type Folder, PREV_ITEM } from '@/models/Item'
+	import { type Folder, type Link, PREV_ITEM } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
 	import {
 		Check as IconCheck,
 		ChevronRight as IconChevronRight,
+		PackageOpen as IconPackageOpen,
 		RefreshCw as IconRefresh,
 		X as IconX
 	} from 'lucide-svelte'
@@ -75,6 +76,13 @@
 		props.selectMenu('add')
 	}
 
+	const openAllLinksInCurrentFolder = async () => {
+		const urls =
+			items?.filter((item): item is Link => item.type === 'link').map(({ url }) => url) ?? []
+		await Promise.all(urls.map((url) => browser.tabs.create({ url, active: false })))
+		window.close()
+	}
+
 	let isOnce = false
 	$effect(() => {
 		if (!foldersStore.currentFolder) return
@@ -106,11 +114,27 @@
 				<PopupFoldersBreadcrumbs />
 				<button
 					type="button"
-					class="gap-1 ml-auto flex items-center text-primary"
+					class="group relative gap-1 ml-auto flex items-center"
 					onclick={refresh}
 				>
-					<IconRefresh size="12px" />
-					<span class="text-[11px] tracking-[-0.2px]">{m.Refresh()}</span>
+					<IconRefresh size="14px" strokeWidth="1.5" />
+					<span
+						class="pointer-events-none absolute top-full right-0 z-10 mt-1.5 whitespace-nowrap rounded-md bg-surface px-2 py-1 text-[11px] text-text-primary opacity-0 shadow-sm transition-opacity duration-150 group-hover:opacity-100"
+					>
+						{m.Refresh()}
+					</span>
+				</button>
+				<button
+					type="button"
+					class="group relative ml-1.5 gap-1 flex items-center text-primary"
+					onclick={openAllLinksInCurrentFolder}
+				>
+					<IconPackageOpen size="14px" strokeWidth="1.5" />
+					<span
+						class="pointer-events-none absolute top-full right-0 z-10 mt-1.5 whitespace-nowrap rounded-md bg-surface px-2 py-1 text-[11px] text-text-primary opacity-0 shadow-sm transition-opacity duration-150 group-hover:opacity-100"
+					>
+						{m.OpenAll()}
+					</span>
 				</button>
 			</header>
 		{/if}
