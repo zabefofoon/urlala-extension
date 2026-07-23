@@ -69,20 +69,22 @@
 		</button>
 	</div>
 	<div class="flex items-center ml-auto overflow-hidden whitespace-nowrap">
-		{#if !authStore.isLoggedIn}
-			<button
-				type="button"
-				class="flex items-center bg-primary text-white rounded-full px-2 py-1.5"
-				onclick={login}
-			>
-				<span class="text-[11px] leading-[100%]">{m.Login()}</span>
-			</button>
-		{:else}
-			<button type="button" class="flex items-center w-full overflow-hidden">
-				<span class="text-[11px] leading-[100%] tracking-[-0.2px] truncate">
-					{authStore.user?.email?.split('@')[0]}
-				</span>
-			</button>
+		{#if !authStore.isLoading}
+			{#if !authStore.isLoggedIn}
+				<button
+					type="button"
+					class="flex items-center bg-primary text-white rounded-full px-2 py-1.5"
+					onclick={login}
+				>
+					<span class="text-[11px] leading-[100%]">{m.Login()}</span>
+				</button>
+			{:else}
+				<button type="button" class="flex items-center w-full overflow-hidden">
+					<span class="text-[11px] leading-[100%] tracking-[-0.2px] truncate">
+						{authStore.user?.email?.split('@')[0]}
+					</span>
+				</button>
+			{/if}
 		{/if}
 		<button
 			type="button"
