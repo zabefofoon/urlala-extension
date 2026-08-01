@@ -7,7 +7,7 @@ export default defineConfig({
 	srcDir: 'src',
 	modules: ['@wxt-dev/module-svelte'],
 	manifest: {
-		version: '1.0.3',
+		version: '1.0.4',
 		homepage_url: 'https://urlala.dev',
 		default_locale: 'en',
 		name: '__MSG_extensionName__',
