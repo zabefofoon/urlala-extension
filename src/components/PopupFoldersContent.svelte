@@ -108,7 +108,7 @@
 </script>
 
 <div class="flex flex-1 flex-col overflow-hidden">
-	<div class="flex-1 flex flex-col overflow-auto">
+	<div class="flex-1 flex flex-col overflow-auto mb-2">
 		{#if items?.length && authStore.isLoggedIn}
 			<header class="flex items-center px-3 pt-2 shrink-0">
 				<PopupFoldersBreadcrumbs />
