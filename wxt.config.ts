@@ -1,18 +1,21 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'wxt'
+import type { ConfigEnv, UserManifest } from 'wxt'
+import { URLALA_BASE_URL } from './src/const'
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
 	srcDir: 'src',
 	modules: ['@wxt-dev/module-svelte'],
-	manifest: {
+	manifest: ({ browser }: ConfigEnv): UserManifest => ({
 		version: '1.0.4',
 		homepage_url: 'https://urlala.dev',
 		default_locale: 'en',
 		name: '__MSG_extensionName__',
 		description: '__MSG_extensionDescription__',
 		permissions: ['contextMenus', 'tabs', 'storage'],
+		...(browser === 'safari' ? { host_permissions: [`${URLALA_BASE_URL}/*`] } : {}),
 		web_accessible_resources: [
 			{
 				resources: ['icon/*.png'],
@@ -37,7 +40,7 @@ export default defineConfig({
 				128: 'icon/128.png'
 			}
 		}
-	},
+	}),
 	vite: () => ({
 		plugins: [
 			paraglideVitePlugin({

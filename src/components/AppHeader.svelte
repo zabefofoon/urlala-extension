@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { URLALA_BASE_URL } from '@/const'
 	import { m } from '@/lib/paraglide/messages'
-	import { localizeHref } from '@/lib/paraglide/runtime'
+	import { login } from '@/lib/utils/login'
 	import { cn } from '@/lib/utils/cn'
 	import { authStore } from '@/stores/auth.svelte'
 	import { Settings as IconSettings } from 'lucide-svelte'
@@ -20,12 +19,6 @@
 		} catch (error) {
 			console.error('Failed to open options page:', error)
 		}
-	}
-
-	const login = async () => {
-		await browser.tabs.create({
-			url: localizeHref(`${URLALA_BASE_URL}/external/login?from=extension`)
-		})
 	}
 </script>
 

@@ -13,6 +13,8 @@
 	"OpenOptionsPage": "Open options page",
 	"Folders": "Folders",
 	"Login": "Login",
+	"LoginPermissionRequired": "To log in, allow Urlala to access urlala.dev. Click Login again and allow access. If access is blocked, change urlala.dev to Allow in your browser's extension settings.",
+	"LoginPermissionFailed": "Could not start login. Check Urlala's access to urlala.dev in your browser's extension settings, then try again.",
 	"LimitWarning": "Can only save up to 30 items when not logged in.",
 	"TitleLabel": "Title",
 	"TitlePlaceholder": "Enter title",

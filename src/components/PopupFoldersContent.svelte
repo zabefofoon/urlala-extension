@@ -3,6 +3,7 @@
 	import { m } from '@/lib/paraglide/messages'
 	import { getLocale, localizeHref } from '@/lib/paraglide/runtime'
 	import etc from '@/lib/utils/etc'
+	import { login } from '@/lib/utils/login'
 	import { type Folder, type Link, PREV_ITEM } from '@/models/Item'
 	import { authStore } from '@/stores/auth.svelte'
 	import { foldersStore } from '@/stores/folders.svelte'
@@ -204,13 +205,7 @@
 			</button>
 		{:else}
 			<p class="w-full text-[12px] text-center text-text-secondary">
-				<button
-					class="text-primary underline"
-					onclick={() =>
-						browser.tabs.create({
-							url: localizeHref(`${URLALA_BASE_URL}/external/login?from=extension`)
-						})}
-				>
+				<button class="text-primary underline" onclick={login}>
 					{m.LoginLinkText()}
 				</button>
 				{m.LoginMoreFeatures()}

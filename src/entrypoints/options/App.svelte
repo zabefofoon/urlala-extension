@@ -5,6 +5,7 @@
 	import { m } from '@/lib/paraglide/messages'
 	import { getLocale, localizeHref } from '@/lib/paraglide/runtime'
 	import { authStore } from '@/stores/auth.svelte'
+	import { login } from '@/lib/utils/login'
 	import {
 		AppWindow as IconAppWindow,
 		Check as IconCheck,
@@ -41,10 +42,6 @@
 
 		browser.tabs.create({ url })
 		window.close()
-	}
-
-	const login = () => {
-		browser.tabs.create({ url: localizeHref(`${URLALA_BASE_URL}/external/login?from=extension`) })
 	}
 
 	onMount(() => {

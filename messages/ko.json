@@ -13,6 +13,8 @@
 	"OpenOptionsPage": "옵션 페이지 열기",
 	"Folders": "폴더",
 	"Login": "로그인",
+	"LoginPermissionRequired": "로그인하려면 urlala.dev 접근 권한이 필요합니다. 로그인 버튼을 다시 눌러 접근을 허용해주세요. 차단된 경우 브라우저의 확장 프로그램 설정에서 urlala.dev를 허용으로 변경해주세요.",
+	"LoginPermissionFailed": "로그인을 시작하지 못했습니다. 브라우저의 확장 프로그램 설정에서 Urlala의 urlala.dev 접근 권한을 확인한 뒤 다시 시도해주세요.",
 	"LimitWarning": "비로그인 상태에서는 30개까지만 저장됩니다.",
 	"TitleLabel": "제목",
 	"TitlePlaceholder": "제목을 입력하세요",
