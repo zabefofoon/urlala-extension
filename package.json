@@ -4,12 +4,16 @@
 	"private": true,
 	"version": "1.0.4",
 	"type": "module",
+	"engines": {
+		"node": "^22.18.0 || >=24.0.0"
+	},
 	"scripts": {
 		"dev": "wxt",
 		"dev:firefox": "pnpm run paraglide:compile && wxt -b firefox",
 		"build": "pnpm run paraglide:compile && wxt build",
 		"build:firefox": "pnpm run paraglide:compile && wxt build -b firefox",
-		"build:safari": "pnpm run paraglide:compile && wxt build -b safari && xcrun safari-web-extension-converter .output/safari-mv2 --project-location .output --app-name Urlala --bundle-identifier com.urlala.extension --no-open",
+		"build:safari": "pnpm run paraglide:compile && wxt build -b safari && node scripts/build-safari.mts",
+		"test:safari": "node --test scripts/safari-project.test.mts",
 		"zip": "pnpm run paraglide:compile && wxt zip",
 		"zip:firefox": "pnpm run paraglide:compile && wxt zip -b firefox",
 		"zip:safari": "pnpm run paraglide:compile && wxt zip -b safari",
@@ -18,6 +22,12 @@
 		"lint": "eslint src",
 		"format": "prettier --write src",
 		"postinstall": "wxt prepare"
+	},
+	"safari": {
+		"bundleIdentifier": "com.poorkimchiking.urlala.extension",
+		"team": "2MN23334YS",
+		"category": "public.app-category.productivity",
+		"buildNumber": "1"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
