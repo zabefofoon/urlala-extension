@@ -4,8 +4,8 @@
 	import { URLALA_BASE_URL } from '@/const'
 	import { m } from '@/lib/paraglide/messages'
 	import { getLocale, localizeHref } from '@/lib/paraglide/runtime'
-	import { authStore } from '@/stores/auth.svelte'
 	import { login } from '@/lib/utils/login'
+	import { authStore } from '@/stores/auth.svelte'
 	import {
 		AppWindow as IconAppWindow,
 		Check as IconCheck,
@@ -350,7 +350,7 @@
 				<a href={localizeHref(`${URLALA_BASE_URL}/privacy`)}>{m.Privacy()}</a>
 				<a href={localizeHref(`${URLALA_BASE_URL}/terms`)}>{m.TermsOfService()}</a>
 			</div>
-			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.4</p>
+			<p class="text-text-secondary text-center text-[11px]">Urala Extension 1.0.5</p>
 		</div>
 	</section>
 </main>
